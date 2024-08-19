@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "83531326939",
+    "project_id": "baitulmaal-95d72",
+    "storage_bucket": "baitulmaal-95d72.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:83531326939:android:7f478e851c1eed4ddf73fe",
+        "android_client_info": {
+          "package_name": "com.group4.baitulmaal"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCNzCgWfE_6d7b-fFO8Y0dzAHfsPBtMx9Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

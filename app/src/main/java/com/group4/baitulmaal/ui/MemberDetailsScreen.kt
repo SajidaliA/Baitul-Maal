@@ -24,6 +24,7 @@ import androidx.navigation.NavHostController
 import com.group4.baitulmaal.R
 import com.group4.baitulmaal.data.Member
 import com.group4.baitulmaal.utils.MEMBER_KEY
+import com.group4.baitulmaal.utils.Screens
 import com.group4.baitulmaal.utils.aukafAmount
 import com.group4.baitulmaal.utils.madresaFeesAmount
 
@@ -37,7 +38,13 @@ fun MemberDetailsScreen(navController: NavHostController? = null) {
             .fillMaxSize()
             .background(Color.White)
     ) {
-        Header(stringResource(id = R.string.member_details))
+        Header(stringResource(id = R.string.member_details), showEdit = true) {
+            navController?.currentBackStackEntry?.savedStateHandle?.set(
+                MEMBER_KEY,
+                member
+            )
+            navController?.navigate(Screens.addNewMember.name)
+        }
         Column(
             verticalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier.fillMaxHeight()

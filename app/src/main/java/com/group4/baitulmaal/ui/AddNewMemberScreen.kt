@@ -11,16 +11,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
@@ -32,9 +26,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.positionInWindow
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -43,13 +38,20 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.unit.toSize
+import androidx.navigation.NavHostController
 import com.group4.baitulmaal.R
+import com.group4.baitulmaal.data.Member
+import com.group4.baitulmaal.utils.MEMBER_KEY
 import com.group4.baitulmaal.utils.aukafAmount
 import com.group4.baitulmaal.utils.madresaFeesAmount
 
 @Composable
-fun AddNewMemberScreen() {
+fun AddNewMemberScreen(navController: NavHostController? = null) {
+
+    val member =
+        navController?.previousBackStackEntry?.savedStateHandle
+            ?.get<Member>(MEMBER_KEY)
+
     var headOfTheFamily by remember {
         mutableStateOf("")
     }
@@ -75,18 +77,25 @@ fun AddNewMemberScreen() {
     var totalPayableAmount by remember {
         mutableIntStateOf(0)
     }
-    var mExpanded by remember { mutableStateOf(false) }
-    val mCities = listOf("Delhi", "Mumbai", "Chennai", "Kolkata", "Hyderabad", "Bengaluru", "Pune")
-    var mSelectedText by remember {
+    var mSelectedAgevan by remember {
         mutableStateOf("આગેવાન નું નામ")
     }
+
+    var anchorPosition by remember { mutableStateOf(Offset.Zero) }
+    var showPopup by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
     ) {
-        Header(title = stringResource(id = R.string.add_new_member))
+        Header(
+            title = if (member == null) {
+                stringResource(id = R.string.add_new_member)
+            } else {
+                stringResource(id = R.string.edit_member)
+            }
+        ) {}
         Column(verticalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxSize()) {
             Column(
                 modifier = Modifier
@@ -97,23 +106,19 @@ fun AddNewMemberScreen() {
                 Text(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .border(1.dp, color = colorResource(id = R.color.teal_700), RoundedCornerShape(5.dp))
-                        .clickable { mExpanded = !mExpanded }
+                        .border(
+                            1.dp,
+                            color = colorResource(id = R.color.teal_700),
+                            RoundedCornerShape(5.dp)
+                        )
+                        .clickable { showPopup = !showPopup }
                         .padding(15.dp)
-                    ,text = mSelectedText
+                        .onGloballyPositioned { coordinates ->
+                            // Capture the position and size of the Text view
+                            anchorPosition = coordinates.positionInWindow()
+                        },
+                    text = mSelectedAgevan
                 )
-                DropdownMenu(
-                    expanded = mExpanded,
-                    onDismissRequest = { mExpanded = false },
-                    modifier = Modifier.padding(15.dp).fillMaxWidth()
-                ) {
-                    mCities.forEach { label ->
-                        DropdownMenuItem(text = { Text(text = label) }, onClick = {
-                            mSelectedText = label
-                            mExpanded = false
-                        })
-                    }
-                }
                 Spacer(modifier = Modifier.height(15.dp))
                 OutlinedTextField(
                     modifier = Modifier.fillMaxWidth(),
@@ -208,6 +213,12 @@ fun AddNewMemberScreen() {
 
     }
 
+    if (showPopup) {
+        AgevanListPopup(anchorPosition) {
+            mSelectedAgevan = it
+            showPopup = false
+        }
+    }
 
 
 }

@@ -17,4 +17,5 @@
     <string name="agevan_name">"આગેવાન નું નામ"</string>
     <string name="total_paid_amount">"ટોટલ જમા રકમ "</string>
     <string name="total_unpaid_amount">"ટોટલ બાકી રકમ "</string>
+    <string name="edit_member">વિગત સુધારો</string>
 </resources>

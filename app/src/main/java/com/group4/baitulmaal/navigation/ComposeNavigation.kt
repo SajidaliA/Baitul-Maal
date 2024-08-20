@@ -22,7 +22,7 @@ fun ComposeNavigation() {
             MemberDetailsScreen(navController)
         }
         composable(Screens.addNewMember.name){
-            AddNewMemberScreen()
+            AddNewMemberScreen(navController)
         }
     }
 }

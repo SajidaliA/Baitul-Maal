@@ -2,6 +2,7 @@ package com.group4.baitulmaal.ui
 
 import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -27,13 +28,15 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.positionInWindow
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -43,106 +46,104 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.group4.baitulmaal.R
 import com.group4.baitulmaal.data.Member
-import com.group4.baitulmaal.data.Month
 import com.group4.baitulmaal.utils.MEMBER_KEY
 import com.group4.baitulmaal.utils.Screens
+import com.group4.baitulmaal.utils.agevanList
+import com.group4.baitulmaal.utils.months
 
 @Composable
 fun MemberListScreen(navHostController: NavHostController) {
 
-    var totalPaidAmount by remember {
-        mutableIntStateOf(0)
+    var totalPaidAmount = 0
+    var totalUnPaidAmount = 0
+    var mSelectedMonth by remember { mutableStateOf(months[0]) }
+    var mSelectedAgevan by remember {
+        mutableStateOf(agevanList[0])
     }
-    var totalUnPaidAmount by remember {
-        mutableIntStateOf(0)
-    }
+    var anchorPosition by remember { mutableStateOf(Offset.Zero) }
+    var showPopup by remember { mutableStateOf(false) }
 
 
-    val months = mutableListOf(
-        Month(0, "ટોટલ", true),
-        Month(1, "જાન્યુઆરી"),
-        Month(2, "ફેબ્રુઆરી"),
-        Month(3, "માર્ચ"),
-        Month(4, "એપ્રિલ"),
-        Month(5, "મે"),
-        Month(6, "જૂન"),
-        Month(7, "જુલાઈ"),
-        Month(8, "ઓગસ્ટ"),
-        Month(9, "સપ્ટેમ્બર"),
-        Month(10, "ઓક્ટોબર"),
-        Month(11, "નવેમ્બર"),
-        Month(12, "ડિસેમ્બર")
-    )
     val members = listOf(
         Member(
             id = 1,
             name = "સાજીદઅલી અહેમદ ભાઈ સુથાર",
             fourYearsAbove = 2,
             studyInMadresa = 1,
-            paid = false
+            paid = false,
+            agevadId = 0
         ),
         Member(
             id = 2,
             name = "અકબરઅલી અબ્દુલભાઈ સુથાર",
             fourYearsAbove = 4,
             studyInMadresa = 2,
-            paid = true
+            paid = true,
+            agevadId = 0
         ),
         Member(
             id = 3,
             name = "મંજુરહેમદ અહેમદભાઈ સુથાર",
             fourYearsAbove = 4,
             studyInMadresa = 2,
-            paid = true
+            paid = true,
+            agevadId = 0
         ),
         Member(
             id = 4,
             name = "જાફરઅલી રહીમભાઈ સુથાર",
             fourYearsAbove = 5,
             studyInMadresa = 0,
-            paid = true
+            paid = true,
+            agevadId = 0
         ),
         Member(
             id = 5,
             name = "હૈદરઅલી રહીમભાઈ સુથાર",
             fourYearsAbove = 7,
             studyInMadresa = 3,
-            paid = true
+            paid = true,
+            agevadId = 0
         ),
         Member(
             id = 6,
             name = "અબ્બાસઅલી મહંમદભાઈ સુથાર",
             fourYearsAbove = 5,
             studyInMadresa = 1,
-            paid = false
+            paid = false,
+            agevadId = 0
         ),
         Member(
             id = 7,
             name = "હસનઅલી મહંમદભાઈ સુથાર",
             fourYearsAbove = 2,
             studyInMadresa = 0,
-            paid = true
+            paid = true,
+            agevadId = 0
         ),
         Member(
             id = 8,
             name = "અબ્બાસઅલી ઈસ્માઈલભાઈ સુથાર",
             fourYearsAbove = 6,
             studyInMadresa = 3,
-            paid = true
+            paid = true,
+            agevadId = 0
         ),
         Member(
             id = 9,
             name = "હૈદરઅલી ફતેહભાઈ સુથાર",
             fourYearsAbove = 4,
             studyInMadresa = 0,
-            paid = false
+            paid = false,
+            agevadId = 0
         ),
         Member(
             id = 10,
             name = "શેરઅલી ફતેહભાઈ સુથાર",
             fourYearsAbove = 6,
             studyInMadresa = 1,
-            paid = true
+            paid = true,
+            agevadId = 0
         )
     )
     members.forEach { member ->
@@ -153,8 +154,15 @@ fun MemberListScreen(navHostController: NavHostController) {
         }
     }
 
+    if (showPopup) {
+        AgevanListPopup(anchorPosition) {
+            mSelectedAgevan = it
+            showPopup = false
+        }
+    }
+
     Column {
-        Header(stringResource(id = R.string.member_list), true)
+        Header(stringResource(id = R.string.member_list), true) {}
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -195,23 +203,32 @@ fun MemberListScreen(navHostController: NavHostController) {
             }
 
         }
-        var isSelected by remember {
-            mutableStateOf(false)
-        }
+        Text(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(15.dp)
+                .border(
+                    1.dp,
+                    color = colorResource(id = R.color.teal_700),
+                    RoundedCornerShape(5.dp)
+                )
+                .clickable { showPopup = !showPopup }
+                .padding(15.dp)
+                .onGloballyPositioned { coordinates ->
+                    // Capture the position and size of the Text view
+                    anchorPosition = coordinates.positionInWindow()
+                },
+            text = mSelectedAgevan,
+
+            )
         LazyRow(
             modifier = Modifier.fillMaxWidth(),
             contentPadding = PaddingValues(horizontal = 15.dp)
         ) {
             items(months) { month ->
-                isSelected = month.isSelected
-                MonthView(month.title, isSelected) { selectedMonth->
+                MonthView(month, mSelectedMonth) { selectedMonth ->
+                    mSelectedMonth = selectedMonth
                     Log.e("TAG", "Selected month : $selectedMonth")
-                    months.map {
-                        it.isSelected = false
-                        if (it.title == selectedMonth){
-                            it.isSelected = true
-                        }
-                    }
                 }
             }
         }
@@ -244,19 +261,19 @@ fun MemberListScreen(navHostController: NavHostController) {
 }
 
 @Composable
-fun MonthView(month: String, isSelected : Boolean, onMonthClick: (String) -> Unit) {
+fun MonthView(month: String, mSelectedMonth: String, onMonthClick: (String) -> Unit) {
     Text(
         text = month,
         modifier = Modifier
             .background(
                 shape = RoundedCornerShape(20.dp),
-                color = if (isSelected) colorResource(id = R.color.teal_700) else Color.LightGray
+                color = if (mSelectedMonth == month) colorResource(id = R.color.teal_700) else Color.LightGray
             )
             .padding(horizontal = 15.dp, vertical = 5.dp)
             .clickable {
                 onMonthClick(month)
             },
-        color = if (isSelected) Color.White else Color.Black,
+        color = if (mSelectedMonth == month) Color.White else Color.Black,
         fontSize = 14.sp,
         fontWeight = FontWeight.SemiBold
     )

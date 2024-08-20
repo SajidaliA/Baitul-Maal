@@ -14,5 +14,6 @@ data class Member(
     val studyInMadresa: Int,
     val totalMadresaFeeAmount: Int = studyInMadresa * madresaFeesAmount,
     val totalPayableAmount: Int = totalAukafAmount + totalMadresaFeeAmount,
-    val paid: Boolean
+    val paid: Boolean,
+    val agevadId: Int
 ): Parcelable

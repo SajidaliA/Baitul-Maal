@@ -18,8 +18,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -157,56 +157,67 @@ fun MemberListScreen(navHostController: NavHostController) {
     }
 
     Column {
-        Header(stringResource(id = R.string.member_list), true) {}
+        Header(stringResource(id = R.string.app_name), true) {}
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(15.dp)
         ) {
-            Text(
+            Card(
+                elevation = CardDefaults.cardElevation(defaultElevation = 3.dp),
+                colors = CardDefaults.cardColors(containerColor = Color.White),
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f)
-                    .border(
-                        1.dp,
-                        color = colorResource(id = R.color.teal_700),
-                        RoundedCornerShape(10.dp)
-                    )
-                    .padding(15.dp),
-                textAlign = TextAlign.Center,
-                text = "${stringResource(id = R.string.total_paid_amount)}\n₹$totalPaidAmount",
-                color = Color.Black,
-                fontWeight = FontWeight.SemiBold,
-                fontSize = 16.sp
-            )
+            ) {
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(15.dp),
+                    textAlign = TextAlign.Center,
+                    text = "${stringResource(id = R.string.total_paid_amount)}\n₹$totalPaidAmount",
+                    color = Color.Black.copy(alpha = 0.8f),
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 14.sp
+                )
+            }
             Spacer(modifier = Modifier.width(15.dp))
-            Text(
+            Card(
+                elevation = CardDefaults.cardElevation(defaultElevation = 3.dp),
+                colors = CardDefaults.cardColors(containerColor = Color.White),
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f)
-                    .border(
-                        1.dp,
-                        color = colorResource(id = R.color.teal_700),
-                        RoundedCornerShape(10.dp)
-                    )
-                    .padding(15.dp),
-                textAlign = TextAlign.Center,
-                text = "${stringResource(id = R.string.total_unpaid_amount)}\n₹$totalUnPaidAmount",
-                color = Color.Black,
-                fontWeight = FontWeight.SemiBold,
-                fontSize = 16.sp
-            )
-
+            ) {
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(15.dp),
+                    textAlign = TextAlign.Center,
+                    text = "${stringResource(id = R.string.total_unpaid_amount)}\n₹$totalUnPaidAmount",
+                    color = Color.Black.copy(alpha = 0.8f),
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 14.sp
+                )
+            }
 
         }
+        Text(
+            modifier = Modifier.padding(start = 15.dp),
+            text = stringResource(id = R.string.agevan_name),
+            fontWeight = FontWeight.SemiBold,
+            fontSize = 12.sp,
+            color = colorResource(id = R.color.teal_700)
+        )
         Text(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 15.dp)
+                .background(Color.White)
                 .border(
                     1.dp,
                     color = colorResource(id = R.color.teal_700),
-                    RoundedCornerShape(5.dp)
+                    RoundedCornerShape(10.dp)
                 )
                 .clickable { showPopup = !showPopup }
                 .padding(15.dp)
@@ -285,11 +296,13 @@ fun MonthView(month: String, mSelectedMonth: String, onMonthClick: (String) -> U
 
 @Composable
 fun MemberItem(member: Member, onMemberClick: () -> Unit) {
-    ElevatedCard(
+    Card(
         onClick = onMemberClick,
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp), modifier = Modifier
+        elevation = CardDefaults.cardElevation(defaultElevation = 3.dp),
+        modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 10.dp, horizontal = 15.dp)
+            .padding(vertical = 10.dp, horizontal = 15.dp),
+        colors = CardDefaults.cardColors(Color.White)
     ) {
         Column(
             modifier = Modifier
@@ -298,22 +311,19 @@ fun MemberItem(member: Member, onMemberClick: () -> Unit) {
         ) {
             Text(
                 text = member.name,
-                fontWeight = FontWeight.Normal,
-                fontSize = 20.sp
+                color = Color.Black.copy(alpha = 0.8f)
             )
 
             Text(
-                text = "${stringResource(id = R.string.total_payable_amount_for_one_month)} :- ₹${member.totalPayableAmountForOneMonth}",
-                fontWeight = FontWeight.SemiBold,
+                text = "${stringResource(id = R.string.total_payable_amount_for_one_month)} : ₹${member.totalPayableAmountForOneMonth}",
                 fontSize = 12.sp,
-                color = Color.Gray
+                color = Color.Black.copy(alpha = 0.5f)
             )
             if (member.unPaidMonths > 0) {
                 Text(
                     text = "${member.unPaidMonths} ${stringResource(id = R.string.un_paid_months)}",
-                    fontWeight = FontWeight.SemiBold,
                     fontSize = 12.sp,
-                    color = Color.Red
+                    color = Color.Red.copy(alpha = 0.7f)
                 )
             }
             Row(
@@ -321,16 +331,17 @@ fun MemberItem(member: Member, onMemberClick: () -> Unit) {
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
-                    text = "${stringResource(id = R.string.total_payable_amount)} :- ₹${member.totalPayableAmount}",
+                    text = "${stringResource(id = R.string.total_payable_amount)} : ₹${member.totalPayableAmount}",
                     fontWeight = FontWeight.SemiBold,
-                    fontSize = 16.sp
+                    fontSize = 12.sp,
+                    color = colorResource(id = R.color.teal_700)
                 )
                 if (member.unPaidMonths == 0) {
                     Text(
                         text = stringResource(id = R.string.paid),
-                        color = colorResource(id = R.color.green),
+                        color = colorResource(id = R.color.green).copy(alpha = 0.9f),
                         fontWeight = FontWeight.SemiBold,
-                        fontSize = 16.sp
+                        fontSize = 12.sp,
                     )
                 }
             }

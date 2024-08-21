@@ -11,6 +11,7 @@ import androidx.compose.material.icons.filled.Create
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
@@ -29,6 +30,7 @@ fun Header(
 ) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxWidth()
             .background(color = colorResource(id = R.color.teal_700))
@@ -37,18 +39,20 @@ fun Header(
             modifier = Modifier.padding(15.dp),
             text = title,
             color = Color.White,
-            fontWeight = FontWeight.Bold,
+            fontWeight = FontWeight.SemiBold,
             fontSize = 20.sp
         )
-        if (showYear){
+        if (showYear) {
             Text(
-                text = "2024-25",
+                text = "(2024-25)",
                 color = Color.White,
-                fontWeight = FontWeight.Bold,
-                fontSize = 20.sp,
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 18.sp,
                 modifier = Modifier.padding(15.dp),
-                textAlign = TextAlign.End)
+                textAlign = TextAlign.End
+            )
         }
+
         if (showEdit) {
             Icon(Icons.Default.Create, contentDescription = null, tint = Color.White,
                 modifier = Modifier

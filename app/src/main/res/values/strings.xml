@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">બૈતુલ માલ</string>
+    <string name="app_name">બૈતુલ મા\'લ</string>
     <string name="member_list">સભ્ય યાદી</string>
     <string name="add_new_member">નવો સભ્ય ઉમેરો</string>
     <string name="paid">ચૂકતે</string>
@@ -14,7 +14,7 @@
     <string name="total_payable_amount_for_one_month">એક મહિનાની કુલ ભરવાપાત્ર રકમ</string>
     <string name="member_details">સભ્ય ની વિગતો</string>
     <string name="add">એડ કરો</string>
-    <string name="agevan_name">"આગેવાન નું નામ"</string>
+    <string name="agevan_name">"આગેવાન નું નામ :"</string>
     <string name="total_paid_amount">"ટોટલ જમા રકમ "</string>
     <string name="total_unpaid_amount">"ટોટલ બાકી રકમ "</string>
     <string name="edit_member">વિગત સુધારો</string>

@@ -38,7 +38,7 @@ fun AgevanListPopup(anchorPosition: Offset, onAgevanSelect: (String) -> Unit) {
                 .border(
                     1.dp,
                     color = colorResource(id = R.color.teal_700),
-                    RoundedCornerShape(5.dp)
+                    RoundedCornerShape(10.dp)
                 )
         ) {
             Column {

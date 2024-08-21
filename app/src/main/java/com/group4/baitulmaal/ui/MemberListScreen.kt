@@ -1,6 +1,5 @@
 package com.group4.baitulmaal.ui
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -15,12 +14,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExtendedFloatingActionButton
@@ -49,14 +46,13 @@ import com.group4.baitulmaal.data.Member
 import com.group4.baitulmaal.utils.MEMBER_KEY
 import com.group4.baitulmaal.utils.Screens
 import com.group4.baitulmaal.utils.agevanList
-import com.group4.baitulmaal.utils.months
 
 @Composable
 fun MemberListScreen(navHostController: NavHostController) {
 
     var totalPaidAmount = 0
     var totalUnPaidAmount = 0
-    var mSelectedMonth by remember { mutableStateOf(months[0]) }
+//    var mSelectedMonth by remember { mutableStateOf(months[0]) }
     var mSelectedAgevan by remember {
         mutableStateOf(agevanList[0])
     }
@@ -70,85 +66,84 @@ fun MemberListScreen(navHostController: NavHostController) {
             name = "સાજીદઅલી અહેમદ ભાઈ સુથાર",
             fourYearsAbove = 2,
             studyInMadresa = 1,
-            paid = false,
-            agevadId = 0
+            agevadId = 0,
+            unPaidMonths = 2
         ),
         Member(
             id = 2,
             name = "અકબરઅલી અબ્દુલભાઈ સુથાર",
             fourYearsAbove = 4,
             studyInMadresa = 2,
-            paid = true,
-            agevadId = 0
+            agevadId = 0,
+            unPaidMonths = 3
         ),
         Member(
             id = 3,
             name = "મંજુરહેમદ અહેમદભાઈ સુથાર",
             fourYearsAbove = 4,
             studyInMadresa = 2,
-            paid = true,
-            agevadId = 0
+            agevadId = 0,
+            unPaidMonths = 0
         ),
         Member(
             id = 4,
             name = "જાફરઅલી રહીમભાઈ સુથાર",
             fourYearsAbove = 5,
             studyInMadresa = 0,
-            paid = true,
-            agevadId = 0
+            agevadId = 0,
+            unPaidMonths = 5
         ),
         Member(
             id = 5,
             name = "હૈદરઅલી રહીમભાઈ સુથાર",
             fourYearsAbove = 7,
             studyInMadresa = 3,
-            paid = true,
-            agevadId = 0
+            agevadId = 0,
+            unPaidMonths = 7
         ),
         Member(
             id = 6,
             name = "અબ્બાસઅલી મહંમદભાઈ સુથાર",
             fourYearsAbove = 5,
             studyInMadresa = 1,
-            paid = false,
-            agevadId = 0
+            agevadId = 0,
+            unPaidMonths = 0
         ),
         Member(
             id = 7,
             name = "હસનઅલી મહંમદભાઈ સુથાર",
             fourYearsAbove = 2,
             studyInMadresa = 0,
-            paid = true,
-            agevadId = 0
+            agevadId = 0,
+            unPaidMonths = 3
         ),
         Member(
             id = 8,
             name = "અબ્બાસઅલી ઈસ્માઈલભાઈ સુથાર",
             fourYearsAbove = 6,
             studyInMadresa = 3,
-            paid = true,
-            agevadId = 0
+            agevadId = 0,
+            unPaidMonths = 10
         ),
         Member(
             id = 9,
             name = "હૈદરઅલી ફતેહભાઈ સુથાર",
             fourYearsAbove = 4,
             studyInMadresa = 0,
-            paid = false,
-            agevadId = 0
+            agevadId = 0,
+            unPaidMonths = 1
         ),
         Member(
             id = 10,
             name = "શેરઅલી ફતેહભાઈ સુથાર",
             fourYearsAbove = 6,
             studyInMadresa = 1,
-            paid = true,
             agevadId = 0
         )
     )
     members.forEach { member ->
-        if (member.paid) {
-            totalPaidAmount += member.totalPayableAmount
+        if (member.unPaidMonths == 0) {
+            totalPaidAmount += member.totalPaidAmount
         } else {
             totalUnPaidAmount += member.totalPayableAmount
         }
@@ -168,45 +163,46 @@ fun MemberListScreen(navHostController: NavHostController) {
                 .fillMaxWidth()
                 .padding(15.dp)
         ) {
-            Card(
+            Text(
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f)
-            ) {
-                Text(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(15.dp),
-                    textAlign = TextAlign.Center,
-                    text = "${stringResource(id = R.string.total_paid_amount)}\n₹$totalPaidAmount",
-                    color = Color.Black,
-                    fontWeight = FontWeight.SemiBold,
-                    fontSize = 14.sp
-                )
-            }
+                    .border(
+                        1.dp,
+                        color = colorResource(id = R.color.teal_700),
+                        RoundedCornerShape(10.dp)
+                    )
+                    .padding(15.dp),
+                textAlign = TextAlign.Center,
+                text = "${stringResource(id = R.string.total_paid_amount)}\n₹$totalPaidAmount",
+                color = Color.Black,
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 16.sp
+            )
             Spacer(modifier = Modifier.width(15.dp))
-            Card(
+            Text(
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f)
-            ) {
-                Text(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(15.dp),
-                    textAlign = TextAlign.Center,
-                    text = "${stringResource(id = R.string.total_unpaid_amount)}\n₹$totalUnPaidAmount",
-                    color = Color.Black,
-                    fontWeight = FontWeight.SemiBold,
-                    fontSize = 14.sp
-                )
-            }
+                    .border(
+                        1.dp,
+                        color = colorResource(id = R.color.teal_700),
+                        RoundedCornerShape(10.dp)
+                    )
+                    .padding(15.dp),
+                textAlign = TextAlign.Center,
+                text = "${stringResource(id = R.string.total_unpaid_amount)}\n₹$totalUnPaidAmount",
+                color = Color.Black,
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 16.sp
+            )
+
 
         }
         Text(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(15.dp)
+                .padding(horizontal = 15.dp)
                 .border(
                     1.dp,
                     color = colorResource(id = R.color.teal_700),
@@ -221,17 +217,17 @@ fun MemberListScreen(navHostController: NavHostController) {
             text = mSelectedAgevan,
 
             )
-        LazyRow(
-            modifier = Modifier.fillMaxWidth(),
-            contentPadding = PaddingValues(horizontal = 15.dp)
-        ) {
-            items(months) { month ->
-                MonthView(month, mSelectedMonth) { selectedMonth ->
-                    mSelectedMonth = selectedMonth
-                    Log.e("TAG", "Selected month : $selectedMonth")
-                }
-            }
-        }
+//        LazyRow(
+//            modifier = Modifier.fillMaxWidth(),
+//            contentPadding = PaddingValues(horizontal = 15.dp)
+//        ) {
+//            items(months) { month ->
+//                MonthView(month, mSelectedMonth) { selectedMonth ->
+//                    mSelectedMonth = selectedMonth
+//                    Log.e("TAG", "Selected month : $selectedMonth")
+//                }
+//            }
+//        }
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize(),
@@ -254,7 +250,14 @@ fun MemberListScreen(navHostController: NavHostController) {
             .padding(bottom = 15.dp, end = 15.dp),
         contentAlignment = Alignment.BottomEnd
     ) {
-        ExtendedFloatingActionButton(onClick = { navHostController.navigate(Screens.addNewMember.name) },
+        ExtendedFloatingActionButton(
+            onClick = {
+                navHostController.currentBackStackEntry?.savedStateHandle?.set(
+                    MEMBER_KEY,
+                    null
+                )
+                navHostController.navigate(Screens.addNewMember.name)
+            },
             icon = { Icon(Icons.Filled.Add, stringResource(id = R.string.add_new_member)) },
             text = { Text(text = stringResource(id = R.string.add_new_member)) })
     }
@@ -294,42 +297,42 @@ fun MemberItem(member: Member, onMemberClick: () -> Unit) {
                 .padding(vertical = 10.dp, horizontal = 15.dp)
         ) {
             Text(
-                text = "${member.id}. ${member.name}",
+                text = member.name,
                 fontWeight = FontWeight.Normal,
-                fontSize = 18.sp
+                fontSize = 20.sp
             )
 
             Text(
-                text = stringResource(id = R.string.total_payable_amount),
+                text = "${stringResource(id = R.string.total_payable_amount_for_one_month)} :- ₹${member.totalPayableAmountForOneMonth}",
                 fontWeight = FontWeight.SemiBold,
                 fontSize = 12.sp,
                 color = Color.Gray
             )
+            if (member.unPaidMonths > 0) {
+                Text(
+                    text = "${member.unPaidMonths} ${stringResource(id = R.string.un_paid_months)}",
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 12.sp,
+                    color = Color.Red
+                )
+            }
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
-                    text = "₹${member.totalPayableAmount}",
-                    fontWeight = FontWeight.SemiBold,
-                    fontSize = 14.sp
-                )
-                Text(
-                    text = if (member.paid) {
-                        stringResource(id = R.string.paid)
-                    } else {
-                        stringResource(
-                            id = R.string.not_paid
-                        )
-                    },
-                    color = if (member.paid) {
-                        colorResource(id = R.color.green)
-                    } else {
-                        Color.Red
-                    },
+                    text = "${stringResource(id = R.string.total_payable_amount)} :- ₹${member.totalPayableAmount}",
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 16.sp
                 )
+                if (member.unPaidMonths == 0) {
+                    Text(
+                        text = stringResource(id = R.string.paid),
+                        color = colorResource(id = R.color.green),
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 16.sp
+                    )
+                }
             }
         }
     }

@@ -41,7 +41,8 @@ fun Header(
             fontSize = 20.sp
         )
         if (showYear){
-            Text(text = "2024",
+            Text(
+                text = "2024-25",
                 color = Color.White,
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp,

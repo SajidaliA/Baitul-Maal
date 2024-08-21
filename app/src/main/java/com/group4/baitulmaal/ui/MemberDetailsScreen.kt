@@ -106,17 +106,17 @@ fun MemberDetailsScreen(navController: NavHostController? = null) {
                 )
                 Spacer(modifier = Modifier.height(5.dp))
                 Text(text = "₹ ${member?.totalMadresaFeeAmount}", fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
-                member?.totalPayableAmount?.let { TotalPayableAmount(it) }
+                member?.totalPayableAmountForOneMonth?.let { TotalPayableAmount(it) }
                 Text(
                     modifier = Modifier.fillMaxWidth(),
-                    text = if (member?.paid == true){
+                    text = if (member?.unPaidMonths == 0) {
                         stringResource(id = R.string.paid)
                     }else{
                         stringResource(id = R.string.not_paid)
                     },
                     fontSize = 20.sp,
                     fontWeight = FontWeight.SemiBold,
-                    color = if (member?.paid == true){
+                    color = if (member?.unPaidMonths == 0) {
                         colorResource(id = R.color.green)
                     }else{
                         Color.Red

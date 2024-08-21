@@ -13,7 +13,9 @@ data class Member(
     val totalAukafAmount: Int = fourYearsAbove * aukafAmount,
     val studyInMadresa: Int,
     val totalMadresaFeeAmount: Int = studyInMadresa * madresaFeesAmount,
-    val totalPayableAmount: Int = totalAukafAmount + totalMadresaFeeAmount,
-    val paid: Boolean,
-    val agevadId: Int
+    val totalPayableAmountForOneMonth: Int = totalAukafAmount + totalMadresaFeeAmount,
+    val agevadId: Int,
+    val unPaidMonths: Int = 12,
+    val totalPayableAmount: Int = totalPayableAmountForOneMonth * unPaidMonths,
+    val totalPaidAmount: Int = totalPayableAmountForOneMonth * (12 - unPaidMonths)
 ): Parcelable

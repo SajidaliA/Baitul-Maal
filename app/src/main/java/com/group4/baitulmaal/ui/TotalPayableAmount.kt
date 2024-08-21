@@ -21,10 +21,11 @@ fun TotalPayableAmount(totalPayableAmount: Int) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center,
         modifier = Modifier
-            .fillMaxWidth().padding(15.dp)
+            .fillMaxWidth()
+            .padding(15.dp)
     ) {
         Text(
-            text = stringResource(id = R.string.total_payable_amount),
+            text = stringResource(id = R.string.total_payable_amount_for_one_month),
             fontSize = 20.sp,
             fontWeight = FontWeight.SemiBold,
             color = colorResource(id = R.color.teal_700),

@@ -11,11 +11,13 @@
     <string name="no_of_children_studies_in_madresa">મદ્રેસામાં પઢતા બાળકો ની સંખ્યા</string>
     <string name="madresa_fee_amount">મદ્રેસા ફી ની રકમ</string>
     <string name="total_fees_amount">કુલ ભરવાની ફી ની રકમ</string>
-    <string name="total_payable_amount">કુલ ભરવાપાત્ર રકમ</string>
+    <string name="total_payable_amount_for_one_month">એક મહિનાની કુલ ભરવાપાત્ર રકમ</string>
     <string name="member_details">સભ્ય ની વિગતો</string>
     <string name="add">એડ કરો</string>
     <string name="agevan_name">"આગેવાન નું નામ"</string>
     <string name="total_paid_amount">"ટોટલ જમા રકમ "</string>
     <string name="total_unpaid_amount">"ટોટલ બાકી રકમ "</string>
     <string name="edit_member">વિગત સુધારો</string>
+    <string name="un_paid_months">મહિનાના બાકી</string>
+    <string name="total_payable_amount">કુલ ભરવાપાત્ર રકમ</string>
 </resources>

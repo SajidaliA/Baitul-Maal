@@ -20,4 +20,15 @@
     <string name="edit_member">વિગત સુધારો</string>
     <string name="un_paid_months">મહિનાના બાકી</string>
     <string name="total_payable_amount">કુલ ભરવાપાત્ર રકમ</string>
+    <string name="agevan_list">આગેવાન યાદી</string>
+    <string name="members">સભ્યો</string>
+    <string name="add_new_agevan">નવા આગેવાન ઉમેરો</string>
+    <string name="mobile_no">મોબાઈલ નં. :</string>
+    <string name="cencel">કેન્સલ</string>
+    <string name="delete">ડીલીટ કરો</string>
+    <string name="confirmation">કન્ફોર્મ કરો</string>
+    <string name="delete_agevan_confirm">શું તમે ખરેખર આ આગેવાન ને ડીલીટ કરવા માંગો છો?</string>
+    <string name="login">લૉગિન કરો</string>
+    <string name="please_sign_in">આગળ વધવા માટે કૃપા કરીને સાઇન ઇન કરો</string>
+    <string name="password">પાસવર્ડ</string>
 </resources>

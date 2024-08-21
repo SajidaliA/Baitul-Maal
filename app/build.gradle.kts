@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace = "com.group4.baitulmaal"
+    namespace = "com.sajid_ali.baitulmaal"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.group4.baitulmaal"
+        applicationId = "com.sajid_ali.baitulmaal"
         minSdk = 24
         targetSdk = 34
         versionCode = 1

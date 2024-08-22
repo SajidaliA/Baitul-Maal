@@ -30,80 +30,80 @@ val members = listOf(
     Member(
         id = 1,
         headOfTheFamilyName = "સાજીદઅલી અહેમદ ભાઈ સુથાર",
-        fourYearsAbove = 2,
-        studyInMadresa = 1,
+        fourYearsAbove = "2",
+        studyInMadresa = "1",
         agevadId = 0,
         paidMonths = 12
     ),
     Member(
         id = 2,
         headOfTheFamilyName = "અકબરઅલી અબ્દુલભાઈ સુથાર",
-        fourYearsAbove = 4,
-        studyInMadresa = 2,
+        fourYearsAbove = "4",
+        studyInMadresa = "2",
         agevadId = 0,
         paidMonths = 6
     ),
     Member(
         id = 3,
         headOfTheFamilyName = "મંજુરહેમદ અહેમદભાઈ સુથાર",
-        fourYearsAbove = 4,
-        studyInMadresa = 2,
+        fourYearsAbove = "4",
+        studyInMadresa = "2",
         agevadId = 0,
         paidMonths = 10
     ),
     Member(
         id = 4,
         headOfTheFamilyName = "જાફરઅલી રહીમભાઈ સુથાર",
-        fourYearsAbove = 5,
-        studyInMadresa = 0,
+        fourYearsAbove = "5",
+        studyInMadresa = "0",
         agevadId = 0,
         paidMonths = 11
     ),
     Member(
         id = 5,
         headOfTheFamilyName = "હૈદરઅલી રહીમભાઈ સુથાર",
-        fourYearsAbove = 7,
-        studyInMadresa = 3,
+        fourYearsAbove = "7",
+        studyInMadresa = "3",
         agevadId = 0,
         paidMonths = 7
     ),
     Member(
         id = 6,
         headOfTheFamilyName = "અબ્બાસઅલી મહંમદભાઈ સુથાર",
-        fourYearsAbove = 5,
-        studyInMadresa = 1,
+        fourYearsAbove = "5",
+        studyInMadresa = "1",
         agevadId = 0,
         paidMonths = 2
     ),
     Member(
         id = 7,
         headOfTheFamilyName = "હસનઅલી મહંમદભાઈ સુથાર",
-        fourYearsAbove = 2,
-        studyInMadresa = 0,
+        fourYearsAbove = "2",
+        studyInMadresa = "0",
         agevadId = 0,
         paidMonths = 3
     ),
     Member(
         id = 8,
         headOfTheFamilyName = "અબ્બાસઅલી ઈસ્માઈલભાઈ સુથાર",
-        fourYearsAbove = 6,
-        studyInMadresa = 3,
+        fourYearsAbove = "6",
+        studyInMadresa = "3",
         agevadId = 0,
         paidMonths = 10
     ),
     Member(
         id = 9,
         headOfTheFamilyName = "હૈદરઅલી ફતેહભાઈ સુથાર",
-        fourYearsAbove = 4,
-        studyInMadresa = 0,
+        fourYearsAbove = "4",
+        studyInMadresa = "0",
         agevadId = 0,
         paidMonths = 11
     ),
     Member(
         id = 10,
         headOfTheFamilyName = "શેરઅલી ફતેહભાઈ સુથાર",
-        fourYearsAbove = 6,
-        studyInMadresa = 1,
+        fourYearsAbove = "6",
+        studyInMadresa = "1",
         agevadId = 0
     )
 )

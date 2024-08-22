@@ -56,21 +56,25 @@ fun AddNewMemberScreen(navController: NavHostController? = null) {
         mutableStateOf(member?.headOfTheFamilyName ?: "")
     }
     var aboveFourYears by remember {
-        mutableIntStateOf(member?.fourYearsAbove ?: 0)
+        mutableStateOf(member?.fourYearsAbove ?: "")
     }
 
     var totalAukafAmount by remember {
         mutableIntStateOf(0)
     }
-    totalAukafAmount = aboveFourYears * aukafAmount
+    if (aboveFourYears.isNotEmpty()) {
+        totalAukafAmount = aboveFourYears.toInt() * aukafAmount
+    }
 
     var studyInMadresa by remember {
-        mutableIntStateOf(member?.studyInMadresa ?: 0)
+        mutableStateOf(member?.studyInMadresa ?: "")
     }
     var totalFeesAmount by remember {
         mutableIntStateOf(0)
     }
-    totalFeesAmount = studyInMadresa * madresaFeesAmount
+    if (studyInMadresa.isNotEmpty()) {
+        totalFeesAmount = studyInMadresa.toInt() * madresaFeesAmount
+    }
 
     var totalPayableAmount by remember {
         mutableIntStateOf(0)
@@ -140,9 +144,9 @@ fun AddNewMemberScreen(navController: NavHostController? = null) {
                 Spacer(modifier = Modifier.height(16.dp))
                 OutlinedTextField(
                     modifier = Modifier.fillMaxWidth(),
-                    value = aboveFourYears.toString(),
+                    value = aboveFourYears,
                     onValueChange = {
-                        aboveFourYears = it.toInt()
+                        aboveFourYears = it
                     },
                     label = {
                         Text(text = stringResource(id = R.string.number_of_four_years_above))
@@ -171,9 +175,9 @@ fun AddNewMemberScreen(navController: NavHostController? = null) {
                 Spacer(modifier = Modifier.height(16.dp))
                 OutlinedTextField(
                     modifier = Modifier.fillMaxWidth(),
-                    value = studyInMadresa.toString(),
+                    value = studyInMadresa,
                     onValueChange = {
-                        studyInMadresa = it.toInt()
+                        studyInMadresa = it
                     },
                     label = {
                         Text(text = stringResource(id = R.string.no_of_children_studies_in_madresa))

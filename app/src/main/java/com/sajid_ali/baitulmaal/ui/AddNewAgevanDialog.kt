@@ -32,19 +32,24 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.sajid_ali.baitulmaal.R
-import com.sajid_ali.baitulmaal.data.Agevan
 
 @Composable
 fun AddNewAgevanDialog(
+    name: String,
+    contactNo: String,
+    isEdit: Boolean,
     onDismissRequest: () -> Unit,
-    onAddConfirm: (Agevan) -> Unit,
-    mAgevan: Agevan? = null
+    onAddConfirm: (String, String) -> Unit,
 ) {
-    var agevan by remember {
-        mutableStateOf(Agevan(0, "", emptyList(), ""))
+    var agevanName by remember {
+        mutableStateOf("")
     }
-    if (mAgevan != null) {
-        agevan = mAgevan
+    var agevanContactNo by remember {
+        mutableStateOf("")
+    }
+    if (isEdit) {
+        agevanName = name
+        agevanContactNo = contactNo
     }
     Dialog(onDismissRequest = { onDismissRequest() }) {
         Card(
@@ -55,10 +60,10 @@ fun AddNewAgevanDialog(
         ) {
             Column(modifier = Modifier.padding(32.dp)) {
                 Text(
-                    text = if (agevan.name.isEmpty()) {
-                        stringResource(id = R.string.add_new_agevan)
-                    } else {
+                    text = if (isEdit) {
                         stringResource(id = R.string.edit_member)
+                    } else {
+                        stringResource(id = R.string.add_new_agevan)
                     },
                     fontWeight = FontWeight.SemiBold,
                     color = colorResource(id = R.color.teal_700)
@@ -66,8 +71,8 @@ fun AddNewAgevanDialog(
                 Spacer(modifier = Modifier.height(16.dp))
                 OutlinedTextField(
                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
-                    value = agevan.name,
-                    onValueChange = { agevan.name = it },
+                    value = agevanName,
+                    onValueChange = { agevanName = it },
                     label = {
                         Text(text = stringResource(id = R.string.agevan_name))
                     })
@@ -77,8 +82,8 @@ fun AddNewAgevanDialog(
                         keyboardType = KeyboardType.Number,
                         imeAction = ImeAction.Done
                     ),
-                    value = agevan.contactNo,
-                    onValueChange = { agevan.contactNo = it },
+                    value = agevanContactNo,
+                    onValueChange = { agevanContactNo = it },
                     label = {
                         Text(text = stringResource(id = R.string.mobile_no))
                     })
@@ -89,7 +94,7 @@ fun AddNewAgevanDialog(
                     horizontalArrangement = Arrangement.SpaceAround,
                 ) {
                     ElevatedButton(
-                        colors = ButtonDefaults.buttonColors(Color.White),
+                        colors = ButtonDefaults.buttonColors(colorResource(id = R.color.teal_700)),
                         elevation = ButtonDefaults.elevatedButtonElevation(3.dp),
                         onClick = { onDismissRequest() },
                         modifier = Modifier
@@ -97,23 +102,23 @@ fun AddNewAgevanDialog(
                     ) {
                         Text(
                             stringResource(id = R.string.cencel),
-                            color = colorResource(id = R.color.teal_700),
+                            color = Color.White,
                             fontSize = 12.sp,
                             fontWeight = FontWeight.SemiBold
                         )
                     }
                     Spacer(modifier = Modifier.width(10.dp))
                     ElevatedButton(
-                        colors = ButtonDefaults.buttonColors(Color.White),
+                        colors = ButtonDefaults.buttonColors(colorResource(id = R.color.teal_700)),
                         elevation = ButtonDefaults.elevatedButtonElevation(3.dp),
-                        onClick = { onAddConfirm(agevan) },
+                        onClick = { onAddConfirm(agevanName, agevanContactNo) },
                         modifier = Modifier
                             .fillMaxWidth()
                             .weight(1f),
                     ) {
                         Text(
                             stringResource(id = R.string.add),
-                            color = colorResource(id = R.color.teal_700),
+                            color = Color.White,
                             fontSize = 12.sp,
                             fontWeight = FontWeight.SemiBold
                         )

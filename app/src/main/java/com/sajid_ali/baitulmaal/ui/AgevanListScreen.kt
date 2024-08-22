@@ -39,7 +39,9 @@ fun AgevanListScreen(navHostController: NavHostController) {
     var mAgevan by remember {
         mutableStateOf<Agevan?>(null)
     }
-    var isEdit = false
+    var isEdit by remember {
+        mutableStateOf(false)
+    }
     Column(modifier = Modifier.fillMaxSize()) {
         Header(stringResource(id = R.string.agevan_list), false)
         LazyColumn(
@@ -50,9 +52,10 @@ fun AgevanListScreen(navHostController: NavHostController) {
             items(agevanList.subList(1, agevanList.size)) { agevan ->
                 AgevanItem(navHostController, agevan, { agevanEdit ->
                     //Edit agevan
-                    showAddDialog = true
-                    mAgevan = agevanEdit as Agevan
+
                     isEdit = true
+                    mAgevan = agevanEdit as Agevan
+                    showAddDialog = true
                 }, { agevanDelete ->
                     //Delete agevan from DB
                     openDeleteConfirmation = true
@@ -69,7 +72,6 @@ fun AgevanListScreen(navHostController: NavHostController) {
         ExtendedFloatingActionButton(
             shape = RoundedCornerShape(25.dp),
             onClick = {
-                mAgevan = null
                 isEdit = false
                 showAddDialog = true
             },
@@ -77,14 +79,25 @@ fun AgevanListScreen(navHostController: NavHostController) {
             text = { Text(text = stringResource(id = R.string.add_new_agevan)) })
     }
     if (showAddDialog) {
-        AddNewAgevanDialog(onDismissRequest = { showAddDialog = false }, { agevan ->
+        var agevanName = ""
+        var agevanContactNo = ""
+        if (isEdit) {
+            agevanName = mAgevan?.name ?: ""
+            agevanContactNo = mAgevan?.contactNo ?: ""
+        }
+        AddNewAgevanDialog(
+            agevanName,
+            agevanContactNo,
+            isEdit,
+            onDismissRequest = { showAddDialog = false },
+            { name, contactNo ->
             showAddDialog = false
             if (isEdit) {
                 //Updated agevan
             } else {
                 //Add agevan to db
             }
-        }, mAgevan = mAgevan)
+            })
     }
     if (openDeleteConfirmation) {
         ConfirmationDialog(

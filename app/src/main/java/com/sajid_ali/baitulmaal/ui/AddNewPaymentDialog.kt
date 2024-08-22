@@ -76,7 +76,7 @@ fun AddNewPaymentDialog(
                     horizontalArrangement = Arrangement.SpaceAround,
                 ) {
                     ElevatedButton(
-                        colors = ButtonDefaults.buttonColors(Color.White),
+                        colors = ButtonDefaults.buttonColors(colorResource(id = R.color.teal_700)),
                         elevation = ButtonDefaults.buttonElevation(defaultElevation = 3.dp),
                         onClick = { onDismissRequest() },
                         modifier = Modifier
@@ -84,14 +84,14 @@ fun AddNewPaymentDialog(
                     ) {
                         Text(
                             stringResource(id = R.string.cencel),
-                            color = colorResource(id = R.color.teal_700),
+                            color = Color.White,
                             fontSize = 12.sp,
                             fontWeight = FontWeight.SemiBold
                         )
                     }
                     Spacer(modifier = Modifier.width(10.dp))
                     ElevatedButton(
-                        colors = ButtonDefaults.buttonColors(Color.White),
+                        colors = ButtonDefaults.buttonColors(colorResource(id = R.color.teal_700)),
                         elevation = ButtonDefaults.buttonElevation(defaultElevation = 3.dp),
                         onClick = { onAddConfirm(monthsPaid.toInt()) },
                         modifier = Modifier
@@ -100,7 +100,7 @@ fun AddNewPaymentDialog(
                     ) {
                         Text(
                             stringResource(id = R.string.add),
-                            color = colorResource(id = R.color.teal_700),
+                            color = Color.White,
                             fontSize = 12.sp,
                             fontWeight = FontWeight.SemiBold
                         )

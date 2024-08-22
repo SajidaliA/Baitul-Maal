@@ -68,6 +68,7 @@ fun MemberDetailsScreen(navController: NavHostController? = null) {
         },
         bottomBar = {
             member?.let {
+                HorizontalDivider()
                 if (member.paidMonths == 12) {
                     AllPaid(member.totalPaidAmount)
                 } else {
@@ -156,19 +157,20 @@ fun AllPaid(totalPaidAmount: Int) {
         horizontalArrangement = Arrangement.Center,
         modifier = Modifier
             .fillMaxWidth()
-            .background(colorResource(id = R.color.green))
+            .background(Color.White)
             .padding(16.dp)
     ) {
         Text(
             text = " ₹ $totalPaidAmount ",
             fontSize = 18.sp,
-            fontWeight = FontWeight.SemiBold, color = Color.White
+            fontWeight = FontWeight.SemiBold,
+            color = colorResource(id = R.color.green)
         )
         Text(
             text = stringResource(id = R.string.paid),
             fontSize = 18.sp,
             fontWeight = FontWeight.SemiBold,
-            color = Color.White,
+            color = colorResource(id = R.color.green)
         )
 
     }

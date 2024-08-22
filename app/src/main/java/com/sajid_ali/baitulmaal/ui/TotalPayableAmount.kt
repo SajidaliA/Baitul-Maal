@@ -23,19 +23,20 @@ fun TotalPayableAmount(totalPayableAmount: Int) {
         horizontalArrangement = Arrangement.Center,
         modifier = Modifier
             .fillMaxWidth()
-            .background(Color.Red.copy(alpha = 0.7f))
+            .background(Color.White)
             .padding(16.dp)
     ) {
         Text(
             text = stringResource(id = R.string.total_payable_amount),
             fontSize = 18.sp,
             fontWeight = FontWeight.SemiBold,
-            color = Color.White,
+            color = Color.Red.copy(alpha = 0.7f)
         )
         Text(
             text = " : ₹ $totalPayableAmount",
             fontSize = 18.sp,
-            fontWeight = FontWeight.SemiBold, color = Color.White
+            fontWeight = FontWeight.SemiBold,
+            color = Color.Red.copy(alpha = 0.7f)
         )
     }
 }

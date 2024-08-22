@@ -1,25 +1,37 @@
 package com.sajid_ali.baitulmaal.ui
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -42,32 +54,98 @@ fun MemberDetailsScreen(navController: NavHostController? = null) {
     val member =
         navController?.previousBackStackEntry?.savedStateHandle
             ?.get<Member>(MEMBER_KEY)
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White)
-    ) {
-        Header(stringResource(id = R.string.member_details), showEdit = true) {
-            navController?.currentBackStackEntry?.savedStateHandle?.set(
-                MEMBER_KEY,
-                member
-            )
-            navController?.navigate(Screens.addNewMember.name)
-        }
-        Column(
-            verticalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier
-                .fillMaxHeight()
-        ) {
+    var openDeleteConfirmation by remember {
+        mutableStateOf(false)
+    }
+
+    var showAddNewPaymentDialog by remember {
+        mutableStateOf(false)
+    }
+
+    Scaffold(
+        topBar = {
+            Header(stringResource(id = R.string.member_details))
+        },
+        bottomBar = {
             member?.let {
-                MemberDetails(member)
                 if (member.paidMonths == 12) {
                     AllPaid(member.totalPaidAmount)
                 } else {
                     TotalPayableAmount(member.totalPayableAmount)
                 }
             }
+        }) { padding ->
+
+        Column(
+            modifier = Modifier
+                .padding(padding)
+                .verticalScroll(rememberScrollState())
+        ) {
+            member?.let {
+                MemberDetails(it)
+                Column(modifier = Modifier.padding(16.dp)) {
+                    EditDelete(setColor = true, it, { member ->
+                        navController.currentBackStackEntry?.savedStateHandle?.set(
+                            MEMBER_KEY,
+                            member
+                        )
+                        navController.navigate(Screens.addNewMember.name)
+                    }) { member ->
+                        openDeleteConfirmation = true
+                    }
+                    Spacer(modifier = Modifier.height(32.dp))
+
+                    ElevatedButton(
+                        enabled = member.paidMonths < 12,
+                        elevation = ButtonDefaults.elevatedButtonElevation(defaultElevation = 3.dp),
+                        colors = ButtonDefaults.buttonColors(colorResource(id = R.color.teal_700)),
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = {
+                            showAddNewPaymentDialog = true
+                        }) {
+                        Text(
+                            modifier = Modifier.padding(3.dp),
+                            fontWeight = FontWeight.SemiBold,
+                            text = stringResource(id = R.string.add_new_payment),
+                            color = Color.White
+                        )
+                    }
+
+                }
+
+            }
         }
+
+    }
+    val context = LocalContext.current
+    if (showAddNewPaymentDialog) {
+        AddNewPaymentDialog(onDismissRequest = { showAddNewPaymentDialog = false }) {
+            showAddNewPaymentDialog = false
+            member?.let { member ->
+                if (it > (12 - member.paidMonths)) {
+                    Toast.makeText(
+                        context,
+                        "મહિનાઓ બાકી મહિના કરતાં વધુ ન હોવા જોઈએ",
+                        Toast.LENGTH_SHORT
+                    ).show()
+
+                } else {
+                    member.paidMonths.plus(it)
+                }
+            }
+        }
+    }
+    if (openDeleteConfirmation) {
+        ConfirmationDialog(
+            obj = member,
+            onDismissRequest = { openDeleteConfirmation = false },
+            onConfirmation = { memberDelete ->
+                openDeleteConfirmation = false
+                //Delete the member
+            },
+            dialogText = stringResource(id = R.string.delete_member_confirm),
+            buttonText = stringResource(id = R.string.delete)
+        )
     }
 }
 
@@ -103,96 +181,126 @@ fun MemberDetails(member: Member) {
             .fillMaxWidth()
             .padding(16.dp)
     ) {
-        Text(
-            text = stringResource(id = R.string.head_of_the_family),
-            color = colorResource(id = R.color.teal_700),
-            fontSize = 12.sp,
-        )
-        Text(text = member.name, fontSize = 14.sp)
-        HorizontalDivider(
-            modifier = Modifier.padding(vertical = 10.dp),
-            color = (Color.Black).copy(alpha = 0.1f)
-        )
-        Text(
-            text = stringResource(id = R.string.number_of_four_years_above),
-            color = colorResource(id = R.color.teal_700),
-            fontSize = 12.sp
-        )
-        Text(text = member.fourYearsAbove.toString(), fontSize = 14.sp)
-        HorizontalDivider(
-            modifier = Modifier.padding(vertical = 10.dp),
-            color = (Color.Black).copy(alpha = 0.1f)
-        )
-        Text(
-            text = stringResource(id = R.string.aukaf_amount),
-            color = colorResource(id = R.color.teal_700),
-            fontSize = 12.sp
-        )
-        Text(text = "₹ $aukafAmount", fontSize = 14.sp)
-        HorizontalDivider(
-            modifier = Modifier.padding(vertical = 10.dp),
-            color = (Color.Black).copy(alpha = 0.1f)
-        )
-        Text(
-            text = stringResource(id = R.string.total_aukaf_amount),
-            color = colorResource(id = R.color.teal_700),
-            fontSize = 12.sp
-        )
-        Text(text = "₹ ${member.totalAukafAmount}", fontSize = 14.sp)
-        HorizontalDivider(
-            modifier = Modifier.padding(vertical = 10.dp),
-            color = (Color.Black).copy(alpha = 0.1f)
-        )
-        Text(
-            text = stringResource(id = R.string.no_of_children_studies_in_madresa),
-            color = colorResource(id = R.color.teal_700),
-            fontSize = 12.sp
-        )
-        Text(text = member.studyInMadresa.toString(), fontSize = 14.sp)
-        HorizontalDivider(
-            modifier = Modifier.padding(vertical = 10.dp),
-            color = (Color.Black).copy(alpha = 0.1f)
-        )
-        Text(
-            text = stringResource(id = R.string.madresa_fee_amount),
-            color = colorResource(id = R.color.teal_700),
-            fontSize = 12.sp
-        )
-        Text(text = "₹ $madresaFeesAmount", fontSize = 14.sp)
-        HorizontalDivider(
-            modifier = Modifier.padding(vertical = 10.dp),
-            color = (Color.Black).copy(alpha = 0.1f)
-        )
-        Text(
-            text = stringResource(id = R.string.total_fees_amount),
-            color = colorResource(id = R.color.teal_700),
-            fontSize = 12.sp
-        )
-        Text(text = "₹ ${member.totalMadresaFeeAmount}", fontSize = 14.sp)
-        HorizontalDivider(
-            modifier = Modifier.padding(vertical = 10.dp),
-            color = (Color.Black).copy(alpha = 0.1f)
-        )
-        Text(
-            text = stringResource(id = R.string.total_payable_amount_for_one_month),
-            color = colorResource(id = R.color.teal_700),
-            fontSize = 12.sp
-        )
-        Text(text = "₹ ${member.totalPayableAmountForOneMonth}", fontSize = 14.sp)
-        HorizontalDivider(
-            modifier = Modifier.padding(vertical = 10.dp),
-            color = (Color.Black).copy(alpha = 0.1f)
-        )
-        if (member.paidMonths != 12) {
-            Text(
-                modifier = Modifier.fillMaxWidth(),
-                text = "${12 - member.paidMonths} ${stringResource(id = R.string.un_paid_months)}",
-                color = Color.Red,
-                fontSize = 12.sp,
-                fontWeight = FontWeight.SemiBold,
-                textAlign = TextAlign.Center
-            )
+        Card(
+            shape = RoundedCornerShape(25.dp),
+            modifier = Modifier.fillMaxWidth(),
+            colors = CardDefaults.cardColors(Color.White),
+            elevation = CardDefaults.cardElevation(defaultElevation = 3.dp)
+        ) {
+            Column(
+                modifier = Modifier.padding(20.dp)
+            ) {
+                Text(
+                    text = stringResource(id = R.string.head_of_the_family),
+                    color = colorResource(id = R.color.teal_700),
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 12.sp,
+                )
+                Text(text = member.headOfTheFamilyName)
+                HorizontalDivider(
+                    modifier = Modifier.padding(vertical = 16.dp),
+                    color = (Color.Black).copy(alpha = 0.1f)
+                )
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = "${stringResource(id = R.string.number_of_four_years_above)} : ${member.fourYearsAbove}",
+                    color = colorResource(id = R.color.teal_700),
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 12.sp,
+                )
+                HorizontalDivider(
+                    modifier = Modifier.padding(vertical = 16.dp),
+                    color = (Color.Black).copy(alpha = 0.1f)
+                )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceAround
+                ) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text(
+                            text = stringResource(id = R.string.aukaf_amount),
+                            color = Color.Black.copy(alpha = 0.5f),
+                            fontWeight = FontWeight.SemiBold,
+                            fontSize = 12.sp
+                        )
+                        Text(text = "₹ $aukafAmount")
+                    }
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text(
+                            text = stringResource(id = R.string.total_aukaf_amount),
+                            color = Color.Black.copy(alpha = 0.5f),
+                            fontWeight = FontWeight.SemiBold,
+                            fontSize = 12.sp
+                        )
+                        Text(text = "₹ ${member.totalAukafAmount}")
+                    }
+                }
+                HorizontalDivider(
+                    modifier = Modifier.padding(vertical = 16.dp),
+                    color = (Color.Black).copy(alpha = 0.1f)
+                )
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = "${stringResource(id = R.string.no_of_children_studies_in_madresa)} : ${member.studyInMadresa}",
+                    color = colorResource(id = R.color.teal_700),
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 12.sp,
+                )
+                HorizontalDivider(
+                    modifier = Modifier.padding(vertical = 16.dp),
+                    color = (Color.Black).copy(alpha = 0.1f)
+                )
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceAround
+                ) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text(
+                            text = stringResource(id = R.string.madresa_fee_amount),
+                            color = Color.Black.copy(alpha = 0.5f),
+                            fontWeight = FontWeight.SemiBold,
+                            fontSize = 12.sp
+                        )
+                        Text(text = "₹ $madresaFeesAmount")
+                    }
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text(
+                            text = stringResource(id = R.string.total_fees_amount),
+                            color = Color.Black.copy(alpha = 0.5f),
+                            fontWeight = FontWeight.SemiBold,
+                            fontSize = 12.sp
+                        )
+                        Text(text = "₹ ${member.totalMadresaFeeAmount}")
+                    }
+                }
+                HorizontalDivider(
+                    modifier = Modifier.padding(vertical = 16.dp),
+                    color = (Color.Black).copy(alpha = 0.1f)
+                )
+                Text(
+                    text = stringResource(id = R.string.total_payable_amount_for_one_month),
+                    color = colorResource(id = R.color.teal_700),
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 12.sp,
+                )
+                Text(text = "₹ ${member.totalPayableAmountForOneMonth}")
+                if (member.paidMonths != 12) {
+                    HorizontalDivider(
+                        modifier = Modifier.padding(vertical = 16.dp),
+                        color = (Color.Black).copy(alpha = 0.1f)
+                    )
+
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.Center,
+                        text = "${12 - member.paidMonths} ${stringResource(id = R.string.un_paid_months)}",
+                        color = Color.Red,
+                    )
+                }
+            }
         }
+        Spacer(modifier = Modifier.height(16.dp))
         LazyRow(contentPadding = PaddingValues(top = 16.dp)) {
             itemsIndexed(months) { index, month ->
                 month.isPaid = index + 1 <= member.paidMonths
@@ -204,21 +312,25 @@ fun MemberDetails(member: Member) {
 
 @Composable
 fun MonthView(month: Month) {
-    Text(
-        text = month.title,
-        modifier = Modifier
-            .background(
-                shape = RoundedCornerShape(20.dp),
-                color = if (month.isPaid) colorResource(id = R.color.green) else Color.Red.copy(
-                    alpha = 0.9f
+    Card(
+        elevation = CardDefaults.cardElevation(defaultElevation = 3.dp),
+        shape = RoundedCornerShape(25.dp),
+    ) {
+        Text(
+            text = month.title,
+            modifier = Modifier
+                .background(
+                    color = if (month.isPaid) colorResource(id = R.color.green) else Color.Red.copy(
+                        alpha = 0.9f
+                    )
                 )
-            )
-            .padding(horizontal = 16.dp, vertical = 5.dp),
-        color = Color.White,
-        fontSize = 14.sp,
-        fontWeight = FontWeight.SemiBold
-    )
-    Spacer(modifier = Modifier.width(10.dp))
+                .padding(horizontal = 16.dp, vertical = 5.dp),
+            color = Color.White,
+            fontSize = 14.sp
+        )
+    }
+
+    Spacer(modifier = Modifier.width(16.dp))
 }
 
 @Preview

@@ -53,32 +53,34 @@ fun AddNewMemberScreen(navController: NavHostController? = null) {
             ?.get<Member>(MEMBER_KEY)
 
     var headOfTheFamily by remember {
-        mutableStateOf("")
+        mutableStateOf(member?.headOfTheFamilyName ?: "")
     }
     var aboveFourYears by remember {
-        mutableStateOf("")
+        mutableIntStateOf(member?.fourYearsAbove ?: 0)
     }
 
     var totalAukafAmount by remember {
         mutableIntStateOf(0)
     }
-    if (aboveFourYears.isNotEmpty()) {
-        totalAukafAmount = aboveFourYears.toInt() * aukafAmount
-    }
+    totalAukafAmount = aboveFourYears * aukafAmount
+
     var studyInMadresa by remember {
-        mutableStateOf("")
+        mutableIntStateOf(member?.studyInMadresa ?: 0)
     }
     var totalFeesAmount by remember {
         mutableIntStateOf(0)
     }
-    if (studyInMadresa.isNotEmpty()) {
-        totalFeesAmount = studyInMadresa.toInt() * madresaFeesAmount
-    }
+    totalFeesAmount = studyInMadresa * madresaFeesAmount
+
     var totalPayableAmount by remember {
         mutableIntStateOf(0)
     }
+
+    val agevanName =
+        member?.let { getAgevanById(member.agevadId) } ?: stringResource(id = R.string.agevan_name)
+
     var mSelectedAgevan by remember {
-        mutableStateOf("આગેવાન નું નામ")
+        mutableStateOf(agevanName)
     }
 
     var anchorPosition by remember { mutableStateOf(Offset.Zero) }
@@ -95,7 +97,7 @@ fun AddNewMemberScreen(navController: NavHostController? = null) {
             } else {
                 stringResource(id = R.string.edit_member)
             }
-        ) {}
+        )
         Column(verticalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxSize()) {
             Column(
                 modifier = Modifier
@@ -138,9 +140,9 @@ fun AddNewMemberScreen(navController: NavHostController? = null) {
                 Spacer(modifier = Modifier.height(16.dp))
                 OutlinedTextField(
                     modifier = Modifier.fillMaxWidth(),
-                    value = aboveFourYears,
+                    value = aboveFourYears.toString(),
                     onValueChange = {
-                        aboveFourYears = it
+                        aboveFourYears = it.toInt()
                     },
                     label = {
                         Text(text = stringResource(id = R.string.number_of_four_years_above))
@@ -151,7 +153,10 @@ fun AddNewMemberScreen(navController: NavHostController? = null) {
                         ),
                         unfocusedTextColor = Color.LightGray
                     ),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Next)
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Number,
+                        imeAction = ImeAction.Next
+                    )
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 Row(verticalAlignment = Alignment.CenterVertically) {
@@ -166,9 +171,9 @@ fun AddNewMemberScreen(navController: NavHostController? = null) {
                 Spacer(modifier = Modifier.height(16.dp))
                 OutlinedTextField(
                     modifier = Modifier.fillMaxWidth(),
-                    value = studyInMadresa,
+                    value = studyInMadresa.toString(),
                     onValueChange = {
-                        studyInMadresa = it
+                        studyInMadresa = it.toInt()
                     },
                     label = {
                         Text(text = stringResource(id = R.string.no_of_children_studies_in_madresa))
@@ -179,7 +184,10 @@ fun AddNewMemberScreen(navController: NavHostController? = null) {
                         ),
                         unfocusedTextColor = Color.LightGray
                     ),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Done)
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Number,
+                        imeAction = ImeAction.Done
+                    )
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 Row(verticalAlignment = Alignment.CenterVertically) {
@@ -191,22 +199,32 @@ fun AddNewMemberScreen(navController: NavHostController? = null) {
                     Text(text = stringResource(id = R.string.total_fees_amount))
                     Text(text = " :-  ₹ $totalFeesAmount", fontWeight = FontWeight.SemiBold)
                 }
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(32.dp))
                 totalPayableAmount = totalAukafAmount + totalFeesAmount
-                TotalPayableAmount(totalPayableAmount)
+                Text(
+                    text = "${stringResource(id = R.string.total_payable_amount_for_one_month)} : ₹ $totalPayableAmount",
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 20.sp,
+                    color = Color.Red.copy(alpha = 0.8f)
+                )
             }
+
             Button(
+                elevation = ButtonDefaults.buttonElevation(defaultElevation = 6.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = colorResource(id = R.color.teal_700)
+                ),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp),
-                onClick = { /*TODO*/ },
-                colors = ButtonDefaults.buttonColors(colorResource(id = R.color.teal_700))
+                onClick = {
+                    //Add/Update member to DB
+                }
             ) {
                 Text(
-                    text = stringResource(id = R.string.add),
-                    color = Color.White,
+                    modifier = Modifier.padding(4.dp),
                     fontWeight = FontWeight.SemiBold,
-                    fontSize = 14.sp
+                    text = stringResource(id = R.string.add)
                 )
             }
         }
@@ -221,6 +239,10 @@ fun AddNewMemberScreen(navController: NavHostController? = null) {
     }
 
 
+}
+
+fun getAgevanById(agevadId: Int?): String {
+    return "Agevan name"
 }
 
 @Preview

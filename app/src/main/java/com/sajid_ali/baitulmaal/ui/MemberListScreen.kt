@@ -1,9 +1,5 @@
 package com.sajid_ali.baitulmaal.ui
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -11,6 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -43,7 +40,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.sajid_ali.baitulmaal.R
-import com.sajid_ali.baitulmaal.data.Member
 import com.sajid_ali.baitulmaal.utils.MEMBER_KEY
 import com.sajid_ali.baitulmaal.utils.Screens
 import com.sajid_ali.baitulmaal.utils.agevanList
@@ -76,13 +72,14 @@ fun MemberListScreen(navHostController: NavHostController, drawerState: DrawerSt
     }
 
     Column {
-        Header(stringResource(id = R.string.app_name), true, drawerState = drawerState) {}
+        Header(stringResource(id = R.string.app_name), true, drawerState = drawerState)
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)
         ) {
             Card(
+                shape = RoundedCornerShape(25.dp),
                 elevation = CardDefaults.cardElevation(defaultElevation = 3.dp),
                 colors = CardDefaults.cardColors(containerColor = Color.White),
                 modifier = Modifier
@@ -102,6 +99,7 @@ fun MemberListScreen(navHostController: NavHostController, drawerState: DrawerSt
             }
             Spacer(modifier = Modifier.width(16.dp))
             Card(
+                shape = RoundedCornerShape(25.dp),
                 elevation = CardDefaults.cardElevation(defaultElevation = 3.dp),
                 colors = CardDefaults.cardColors(containerColor = Color.White),
                 modifier = Modifier
@@ -128,25 +126,29 @@ fun MemberListScreen(navHostController: NavHostController, drawerState: DrawerSt
             fontSize = 12.sp,
             color = colorResource(id = R.color.teal_700)
         )
-        Text(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp)
-                .background(Color.White)
-                .border(
-                    1.dp,
-                    color = colorResource(id = R.color.teal_700),
-                    RoundedCornerShape(10.dp)
-                )
-                .clickable { showPopup = !showPopup }
-                .padding(16.dp)
-                .onGloballyPositioned { coordinates ->
-                    // Capture the position and size of the Text view
-                    anchorPosition = coordinates.positionInWindow()
-                },
-            text = mSelectedAgevan,
+        Spacer(modifier = Modifier.height(5.dp))
+        Card(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            elevation = CardDefaults.cardElevation(defaultElevation = 3.dp),
+            colors = CardDefaults.cardColors(Color.White),
+            onClick = {
+                showPopup = !showPopup
+            },
+            shape = RoundedCornerShape(25.dp)
+        ) {
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth()
 
+                    .padding(16.dp)
+                    .onGloballyPositioned { coordinates ->
+                        // Capture the position and size of the Text view
+                        anchorPosition = coordinates.positionInWindow()
+                    },
+                text = mSelectedAgevan
             )
+        }
+
 //        LazyRow(
 //            modifier = Modifier.fillMaxWidth(),
 //            contentPadding = PaddingValues(horizontal = 16.dp)
@@ -158,6 +160,7 @@ fun MemberListScreen(navHostController: NavHostController, drawerState: DrawerSt
 //                }
 //            }
 //        }
+        Spacer(modifier = Modifier.height(3.dp))
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize(),
@@ -181,6 +184,7 @@ fun MemberListScreen(navHostController: NavHostController, drawerState: DrawerSt
         contentAlignment = Alignment.BottomEnd
     ) {
         ExtendedFloatingActionButton(
+            shape = RoundedCornerShape(25.dp),
             onClick = {
                 navHostController.currentBackStackEntry?.savedStateHandle?.set(
                     MEMBER_KEY,
@@ -193,58 +197,3 @@ fun MemberListScreen(navHostController: NavHostController, drawerState: DrawerSt
     }
 }
 
-
-@Composable
-fun MemberItem(member: Member, onMemberClick: () -> Unit) {
-    Card(
-        onClick = onMemberClick,
-        elevation = CardDefaults.cardElevation(defaultElevation = 3.dp),
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 10.dp, horizontal = 16.dp),
-        colors = CardDefaults.cardColors(Color.White)
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 10.dp, horizontal = 16.dp)
-        ) {
-            Text(
-                text = member.name,
-                color = Color.Black.copy(alpha = 0.8f)
-            )
-
-            Text(
-                text = "${stringResource(id = R.string.total_payable_amount_for_one_month)} : ₹${member.totalPayableAmountForOneMonth}",
-                fontSize = 12.sp,
-                color = Color.Black.copy(alpha = 0.5f)
-            )
-            if (member.paidMonths != 12) {
-                Text(
-                    text = "${12 - member.paidMonths} ${stringResource(id = R.string.un_paid_months)}",
-                    fontSize = 12.sp,
-                    color = Color.Red.copy(alpha = 0.7f)
-                )
-            }
-            Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(
-                    text = "${stringResource(id = R.string.total_payable_amount)} : ₹${member.totalPayableAmount}",
-                    fontWeight = FontWeight.SemiBold,
-                    fontSize = 12.sp,
-                    color = colorResource(id = R.color.teal_700)
-                )
-                if (member.paidMonths == 12) {
-                    Text(
-                        text = stringResource(id = R.string.paid),
-                        color = colorResource(id = R.color.green).copy(alpha = 0.9f),
-                        fontWeight = FontWeight.SemiBold,
-                        fontSize = 12.sp,
-                    )
-                }
-            }
-        }
-    }
-}

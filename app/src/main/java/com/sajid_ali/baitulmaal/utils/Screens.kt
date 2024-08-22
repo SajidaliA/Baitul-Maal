@@ -5,4 +5,5 @@ enum class Screens {
     memberDetails,
     addNewMember,
     agevanList,
+    loginscreen
 }

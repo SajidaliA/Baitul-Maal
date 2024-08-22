@@ -32,19 +32,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.sajid_ali.baitulmaal.R
-import com.sajid_ali.baitulmaal.data.Agevan
 
 @Composable
-fun AddNewAgevanDialog(
+fun AddNewPaymentDialog(
     onDismissRequest: () -> Unit,
-    onAddConfirm: (Agevan) -> Unit,
-    mAgevan: Agevan? = null
+    onAddConfirm: (Int) -> Unit,
 ) {
-    var agevan by remember {
-        mutableStateOf(Agevan(0, "", emptyList(), ""))
-    }
-    if (mAgevan != null) {
-        agevan = mAgevan
+    var monthsPaid by remember {
+        mutableStateOf("")
     }
     Dialog(onDismissRequest = { onDismissRequest() }) {
         Card(
@@ -55,32 +50,24 @@ fun AddNewAgevanDialog(
         ) {
             Column(modifier = Modifier.padding(32.dp)) {
                 Text(
-                    text = if (agevan.name.isEmpty()) {
-                        stringResource(id = R.string.add_new_agevan)
-                    } else {
-                        stringResource(id = R.string.edit_member)
-                    },
+                    text = stringResource(id = R.string.add_new_payment),
                     fontWeight = FontWeight.SemiBold,
                     color = colorResource(id = R.color.teal_700)
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 OutlinedTextField(
-                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
-                    value = agevan.name,
-                    onValueChange = { agevan.name = it },
-                    label = {
-                        Text(text = stringResource(id = R.string.agevan_name))
-                    })
-                Spacer(modifier = Modifier.height(16.dp))
-                OutlinedTextField(
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Number,
-                        imeAction = ImeAction.Done
+                        imeAction = ImeAction.Next
                     ),
-                    value = agevan.contactNo,
-                    onValueChange = { agevan.contactNo = it },
+                    value = monthsPaid,
+                    onValueChange = {
+                        if (it.isNotEmpty()) {
+                            monthsPaid = it
+                        }
+                    },
                     label = {
-                        Text(text = stringResource(id = R.string.mobile_no))
+                        Text(text = stringResource(id = R.string.paid_months))
                     })
                 Spacer(modifier = Modifier.height(32.dp))
                 Row(
@@ -90,7 +77,7 @@ fun AddNewAgevanDialog(
                 ) {
                     ElevatedButton(
                         colors = ButtonDefaults.buttonColors(Color.White),
-                        elevation = ButtonDefaults.elevatedButtonElevation(3.dp),
+                        elevation = ButtonDefaults.buttonElevation(defaultElevation = 3.dp),
                         onClick = { onDismissRequest() },
                         modifier = Modifier
                             .fillMaxWidth(0.5f),
@@ -105,8 +92,8 @@ fun AddNewAgevanDialog(
                     Spacer(modifier = Modifier.width(10.dp))
                     ElevatedButton(
                         colors = ButtonDefaults.buttonColors(Color.White),
-                        elevation = ButtonDefaults.elevatedButtonElevation(3.dp),
-                        onClick = { onAddConfirm(agevan) },
+                        elevation = ButtonDefaults.buttonElevation(defaultElevation = 3.dp),
+                        onClick = { onAddConfirm(monthsPaid.toInt()) },
                         modifier = Modifier
                             .fillMaxWidth()
                             .weight(1f),

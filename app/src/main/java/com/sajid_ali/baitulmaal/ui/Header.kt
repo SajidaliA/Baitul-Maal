@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.Icon
@@ -29,9 +28,7 @@ import kotlinx.coroutines.launch
 fun Header(
     title: String,
     showYear: Boolean = false,
-    showEdit: Boolean = false,
     drawerState: DrawerState? = null,
-    onEditClick: () -> Unit
 ) {
     val scope = rememberCoroutineScope()
     Row(
@@ -74,16 +71,6 @@ fun Header(
                 fontSize = 18.sp,
                 modifier = Modifier.padding(16.dp),
                 textAlign = TextAlign.End
-            )
-        }
-
-        if (showEdit) {
-            Icon(Icons.Default.Create, contentDescription = null, tint = Color.White,
-                modifier = Modifier
-                    .clickable {
-                        onEditClick()
-                    }
-                    .padding(16.dp)
             )
         }
     }

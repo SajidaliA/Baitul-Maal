@@ -10,7 +10,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -24,7 +23,7 @@ fun TotalPayableAmount(totalPayableAmount: Int) {
         horizontalArrangement = Arrangement.Center,
         modifier = Modifier
             .fillMaxWidth()
-            .background(colorResource(id = R.color.teal_700))
+            .background(Color.Red.copy(alpha = 0.7f))
             .padding(16.dp)
     ) {
         Text(

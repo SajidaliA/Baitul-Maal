@@ -29,7 +29,7 @@ val months = listOf(
 val members = listOf(
     Member(
         id = 1,
-        name = "સાજીદઅલી અહેમદ ભાઈ સુથાર",
+        headOfTheFamilyName = "સાજીદઅલી અહેમદ ભાઈ સુથાર",
         fourYearsAbove = 2,
         studyInMadresa = 1,
         agevadId = 0,
@@ -37,7 +37,7 @@ val members = listOf(
     ),
     Member(
         id = 2,
-        name = "અકબરઅલી અબ્દુલભાઈ સુથાર",
+        headOfTheFamilyName = "અકબરઅલી અબ્દુલભાઈ સુથાર",
         fourYearsAbove = 4,
         studyInMadresa = 2,
         agevadId = 0,
@@ -45,7 +45,7 @@ val members = listOf(
     ),
     Member(
         id = 3,
-        name = "મંજુરહેમદ અહેમદભાઈ સુથાર",
+        headOfTheFamilyName = "મંજુરહેમદ અહેમદભાઈ સુથાર",
         fourYearsAbove = 4,
         studyInMadresa = 2,
         agevadId = 0,
@@ -53,7 +53,7 @@ val members = listOf(
     ),
     Member(
         id = 4,
-        name = "જાફરઅલી રહીમભાઈ સુથાર",
+        headOfTheFamilyName = "જાફરઅલી રહીમભાઈ સુથાર",
         fourYearsAbove = 5,
         studyInMadresa = 0,
         agevadId = 0,
@@ -61,7 +61,7 @@ val members = listOf(
     ),
     Member(
         id = 5,
-        name = "હૈદરઅલી રહીમભાઈ સુથાર",
+        headOfTheFamilyName = "હૈદરઅલી રહીમભાઈ સુથાર",
         fourYearsAbove = 7,
         studyInMadresa = 3,
         agevadId = 0,
@@ -69,7 +69,7 @@ val members = listOf(
     ),
     Member(
         id = 6,
-        name = "અબ્બાસઅલી મહંમદભાઈ સુથાર",
+        headOfTheFamilyName = "અબ્બાસઅલી મહંમદભાઈ સુથાર",
         fourYearsAbove = 5,
         studyInMadresa = 1,
         agevadId = 0,
@@ -77,7 +77,7 @@ val members = listOf(
     ),
     Member(
         id = 7,
-        name = "હસનઅલી મહંમદભાઈ સુથાર",
+        headOfTheFamilyName = "હસનઅલી મહંમદભાઈ સુથાર",
         fourYearsAbove = 2,
         studyInMadresa = 0,
         agevadId = 0,
@@ -85,7 +85,7 @@ val members = listOf(
     ),
     Member(
         id = 8,
-        name = "અબ્બાસઅલી ઈસ્માઈલભાઈ સુથાર",
+        headOfTheFamilyName = "અબ્બાસઅલી ઈસ્માઈલભાઈ સુથાર",
         fourYearsAbove = 6,
         studyInMadresa = 3,
         agevadId = 0,
@@ -93,7 +93,7 @@ val members = listOf(
     ),
     Member(
         id = 9,
-        name = "હૈદરઅલી ફતેહભાઈ સુથાર",
+        headOfTheFamilyName = "હૈદરઅલી ફતેહભાઈ સુથાર",
         fourYearsAbove = 4,
         studyInMadresa = 0,
         agevadId = 0,
@@ -101,7 +101,7 @@ val members = listOf(
     ),
     Member(
         id = 10,
-        name = "શેરઅલી ફતેહભાઈ સુથાર",
+        headOfTheFamilyName = "શેરઅલી ફતેહભાઈ સુથાર",
         fourYearsAbove = 6,
         studyInMadresa = 1,
         agevadId = 0

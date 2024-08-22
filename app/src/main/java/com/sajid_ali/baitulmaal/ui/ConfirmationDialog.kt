@@ -1,30 +1,36 @@
 package com.sajid_ali.baitulmaal.ui
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import com.sajid_ali.baitulmaal.R
-import com.sajid_ali.baitulmaal.data.Agevan
 
 @Composable
 fun ConfirmationDialog(
-    agevan: Agevan?,
+    obj: Any?,
     onDismissRequest: () -> Unit,
-    onConfirmation: (Agevan?) -> Unit,
-    dialogTitle: String,
+    onConfirmation: (Any?) -> Unit,
     dialogText: String,
-    icon: ImageVector,
+    buttonText: String,
 ) {
     AlertDialog(
+        containerColor = Color.White,
         icon = {
-            Icon(icon, contentDescription = "Example Icon")
+            Icon(
+                Icons.Default.Warning,
+                contentDescription = "Example Icon",
+                tint = colorResource(id = R.color.teal_700)
+            )
         },
         title = {
-            Text(text = dialogTitle)
+            Text(text = stringResource(id = R.string.confirmation))
         },
         text = {
             Text(text = dialogText)
@@ -33,21 +39,24 @@ fun ConfirmationDialog(
             onDismissRequest()
         },
         confirmButton = {
-            TextButton(
+            ElevatedButton(
                 onClick = {
-                    onConfirmation(agevan)
+                    onConfirmation(obj)
                 }
             ) {
-                Text(text = stringResource(id = R.string.delete))
+                Text(text = buttonText, color = colorResource(id = R.color.teal_700))
             }
         },
         dismissButton = {
-            TextButton(
+            ElevatedButton(
                 onClick = {
                     onDismissRequest()
                 }
             ) {
-                Text(text = stringResource(id = R.string.cencel))
+                Text(
+                    text = stringResource(id = R.string.cencel),
+                    color = colorResource(id = R.color.teal_700)
+                )
             }
         }
     )

@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.sajid_ali.baitulmaal.ui.AddNewMemberScreen
 import com.sajid_ali.baitulmaal.ui.AgevanListScreen
+import com.sajid_ali.baitulmaal.ui.LoginScreen
 import com.sajid_ali.baitulmaal.ui.MemberDetailsScreen
 import com.sajid_ali.baitulmaal.ui.MemberListScreen
 import com.sajid_ali.baitulmaal.utils.Screens
@@ -27,6 +28,9 @@ fun ComposeNavigation(drawerState: DrawerState? = null, navController: NavHostCo
             }
             composable(Screens.agevanList.name) {
                 AgevanListScreen(navController)
+            }
+            composable(Screens.loginscreen.name) {
+                LoginScreen { _: String, _: String -> }
             }
         }
     }

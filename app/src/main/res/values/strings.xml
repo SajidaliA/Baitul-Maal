@@ -31,4 +31,10 @@
     <string name="login">લૉગિન કરો</string>
     <string name="please_sign_in">આગળ વધવા માટે કૃપા કરીને સાઇન ઇન કરો</string>
     <string name="password">પાસવર્ડ</string>
+    <string name="keep_me_logged_in">મને લોગ ઇન રાખો</string>
+    <string name="logout">લોગ આઉટ</string>
+    <string name="delete_member_confirm">શું તમે ખરેખર આ સભ્ય ને ડીલીટ કરવા માંગો છો?</string>
+    <string name="add_new_payment">નવી ચુકવણી ઉમેરો</string>
+    <string name="logout_confirm">શું તમે ખરેખર લોગ આઉટ કરવા માંગો છો?</string>
+    <string name="paid_months">ચુકવેલ મહિના</string>
 </resources>

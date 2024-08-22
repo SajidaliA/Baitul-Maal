@@ -6,7 +6,9 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,6 +18,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
@@ -47,12 +50,11 @@ class LoginActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             BaitulMaalTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    LoginScreen(
-                        modifier = Modifier.padding(innerPadding)
-                    ) { mobileNo, password ->
+                Scaffold(modifier = Modifier.fillMaxSize()) { _ ->
+                    LoginScreen { mobileNo, password ->
                         Intent(this, MainActivity::class.java).apply {
                             startActivity(this)
+                            finish()
                         }
                     }
                 }
@@ -63,12 +65,14 @@ class LoginActivity : ComponentActivity() {
 
 
 @Composable
-fun LoginScreen(modifier: Modifier = Modifier, onLoginClicked: (String, String) -> Unit) {
+fun LoginScreen(onLoginClicked: (String, String) -> Unit) {
     var mobileNo by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var isChecked by remember { mutableStateOf(false) }
     Column(
         modifier = Modifier
-            .fillMaxSize(),
+            .fillMaxSize()
+            .background(Color.White),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Spacer(modifier = Modifier.height(100.dp))
@@ -132,6 +136,17 @@ fun LoginScreen(modifier: Modifier = Modifier, onLoginClicked: (String, String) 
                 value = password, onValueChange = { password = it },
                 label = { Text(text = stringResource(id = R.string.password)) })
             Spacer(modifier = Modifier.height(32.dp))
+
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Checkbox(checked = isChecked, onCheckedChange = { isChecked = it })
+                Text(
+                    color = Color.Black.copy(alpha = 0.5f),
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Bold,
+                    text = stringResource(id = R.string.keep_me_logged_in)
+                )
+            }
+            Spacer(modifier = Modifier.height(32.dp))
             Button(
                 elevation = ButtonDefaults.buttonElevation(defaultElevation = 6.dp),
                 colors = ButtonDefaults.buttonColors(
@@ -141,7 +156,7 @@ fun LoginScreen(modifier: Modifier = Modifier, onLoginClicked: (String, String) 
                     .fillMaxWidth(),
                 onClick = { onLoginClicked(mobileNo, password) }) {
                 Text(
-                    modifier = Modifier.padding(4.dp),
+                    modifier = Modifier.padding(3.dp),
                     fontWeight = FontWeight.SemiBold,
                     text = stringResource(id = R.string.login)
                 )

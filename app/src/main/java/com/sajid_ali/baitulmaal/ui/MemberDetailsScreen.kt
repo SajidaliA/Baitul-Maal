@@ -41,8 +41,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.sajid_ali.baitulmaal.R
-import com.sajid_ali.baitulmaal.data.Member
-import com.sajid_ali.baitulmaal.data.Month
+import com.sajid_ali.baitulmaal.model.Member
+import com.sajid_ali.baitulmaal.model.Month
 import com.sajid_ali.baitulmaal.utils.MEMBER_KEY
 import com.sajid_ali.baitulmaal.utils.Screens
 import com.sajid_ali.baitulmaal.utils.aukafAmount

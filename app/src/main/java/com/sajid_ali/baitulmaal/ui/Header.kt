@@ -38,22 +38,22 @@ fun Header(
             .fillMaxWidth()
             .background(color = colorResource(id = R.color.teal_700))
     ) {
-        if (showYear) {
-            Icon(
-                Icons.Default.Menu,
-                contentDescription = null,
-                modifier = Modifier
-                    .clickable {
-                        scope.launch {
-                            drawerState?.apply {
-                                if (isClosed) open() else close()
-                            }
+
+        Icon(
+            Icons.Default.Menu,
+            contentDescription = null,
+            modifier = Modifier
+                .clickable {
+                    scope.launch {
+                        drawerState?.apply {
+                            if (isClosed) open() else close()
                         }
                     }
-                    .padding(16.dp),
-                tint = Color.White
-            )
-        }
+                }
+                .padding(16.dp),
+            tint = Color.White
+        )
+        
         Text(
             modifier = Modifier
                 .padding(16.dp)

@@ -1,4 +1,4 @@
-package com.sajid_ali.baitulmaal.data
+package com.sajid_ali.baitulmaal.model
 
 data class Agevan(
     val id: Int,

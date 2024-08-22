@@ -18,7 +18,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sajid_ali.baitulmaal.R
-import com.sajid_ali.baitulmaal.data.Member
+import com.sajid_ali.baitulmaal.model.Member
 
 
 @Composable

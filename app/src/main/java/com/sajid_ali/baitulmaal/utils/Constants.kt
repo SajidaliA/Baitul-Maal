@@ -1,8 +1,8 @@
 package com.sajid_ali.baitulmaal.utils
 
-import com.sajid_ali.baitulmaal.data.Agevan
-import com.sajid_ali.baitulmaal.data.Member
-import com.sajid_ali.baitulmaal.data.Month
+import com.sajid_ali.baitulmaal.model.Agevan
+import com.sajid_ali.baitulmaal.model.Member
+import com.sajid_ali.baitulmaal.model.Month
 
 const val aukafAmount: Int = 35
 const val madresaFeesAmount: Int = 270
@@ -10,6 +10,10 @@ const val MEMBER_KEY: String = "member_key"
 const val USER_TYPE_ADMIN: String = "ADMIN"
 const val USER_TYPE_AGEVAN: String = "AGEVAN"
 const val USER_TYPE_MEMBER: String = "MEMBER"
+const val USER_COLLECTION: String = "users"
+const val AGEVAN_COLLECTION: String = "agevans"
+const val MEMBER_COLLECTION: String = "members"
+
 val months = listOf(
     Month("જૂન"),
     Month("જુલાઈ"),

@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:83531326939:android:7f478e851c1eed4ddf73fe",
+        "mobilesdk_app_id": "1:83531326939:android:23ae390b55e27993df73fe",
         "android_client_info": {
-          "package_name": "com.group4.baitulmaal"
+          "package_name": "com.sajid_ali.baitulmaal"
         }
       },
       "oauth_client": [],

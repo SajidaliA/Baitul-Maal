@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.sajid_ali.baitulmaal.R
-import com.sajid_ali.baitulmaal.data.Agevan
+import com.sajid_ali.baitulmaal.model.Agevan
 
 
 @Composable

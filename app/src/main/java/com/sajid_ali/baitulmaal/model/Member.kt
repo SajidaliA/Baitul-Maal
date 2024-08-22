@@ -1,4 +1,4 @@
-package com.sajid_ali.baitulmaal.data
+package com.sajid_ali.baitulmaal.model
 
 import android.os.Parcelable
 import com.sajid_ali.baitulmaal.utils.aukafAmount

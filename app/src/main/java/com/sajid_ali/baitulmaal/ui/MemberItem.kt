@@ -22,7 +22,7 @@ import com.sajid_ali.baitulmaal.model.Member
 
 
 @Composable
-fun MemberItem(member: Member, onMemberClick: () -> Unit) {
+fun MemberItem(member: Member?, onMemberClick: () -> Unit) {
     Card(
         shape = RoundedCornerShape(25.dp),
         onClick = onMemberClick,
@@ -38,18 +38,20 @@ fun MemberItem(member: Member, onMemberClick: () -> Unit) {
                 .padding(vertical = 16.dp, horizontal = 20.dp)
         ) {
             Text(
-                text = member.headOfTheFamilyName
+                text = member?.headOfTheFamilyName ?: ""
             )
 
             Text(
-                text = "${stringResource(id = R.string.total_payable_amount_for_one_month)} : ₹${member.totalPayableAmountForOneMonth}",
+                text = "${stringResource(id = R.string.total_payable_amount_for_one_month)} : ₹${member?.totalPayableAmountForOneMonth}",
                 color = Color.Black.copy(alpha = 0.5f),
                 fontWeight = FontWeight.SemiBold,
                 fontSize = 12.sp
             )
-            if (member.paidMonths != 12) {
+            if (member?.paidMonths != 12) {
                 Text(
-                    text = "${12 - member.paidMonths} ${stringResource(id = R.string.un_paid_months)}",
+                    text = if (member?.paidMonths != null) {
+                        "${12 - member.paidMonths} ${stringResource(id = R.string.un_paid_months)}"
+                    } else "",
                     fontSize = 12.sp,
                     color = Color.Red.copy(alpha = 0.7f)
                 )
@@ -59,12 +61,12 @@ fun MemberItem(member: Member, onMemberClick: () -> Unit) {
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
-                    text = "${stringResource(id = R.string.total_payable_amount)} : ₹${member.totalPayableAmount}",
+                    text = "${stringResource(id = R.string.total_payable_amount)} : ₹${member?.totalPayableAmount}",
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 12.sp,
                     color = colorResource(id = R.color.teal_700)
                 )
-                if (member.paidMonths == 12) {
+                if (member?.paidMonths == 12) {
                     Text(
                         text = stringResource(id = R.string.paid),
                         color = colorResource(id = R.color.green).copy(alpha = 0.9f),

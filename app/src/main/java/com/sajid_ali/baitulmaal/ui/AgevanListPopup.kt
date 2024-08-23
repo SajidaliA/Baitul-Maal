@@ -19,10 +19,14 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
 import com.sajid_ali.baitulmaal.R
-import com.sajid_ali.baitulmaal.utils.agevanList
+import com.sajid_ali.baitulmaal.model.Agevan
 
 @Composable
-fun AgevanListPopup(anchorPosition: Offset, onAgevanSelect: (String) -> Unit) {
+fun AgevanListPopup(
+    agevanList: List<Agevan?>,
+    anchorPosition: Offset,
+    onAgevanSelect: (Agevan?) -> Unit,
+) {
     Popup(
         alignment = Alignment.TopStart,
         offset = IntOffset(
@@ -44,12 +48,12 @@ fun AgevanListPopup(anchorPosition: Offset, onAgevanSelect: (String) -> Unit) {
             Column {
                 agevanList.forEach { agevan ->
                     Text(
-                        text = agevan.name,
+                        text = agevan?.name ?: "",
                         modifier = Modifier
 
                             .fillMaxWidth()
                             .clickable {
-                                onAgevanSelect(agevan.name)
+                                onAgevanSelect(agevan)
                             }
                             .padding(16.dp))
                 }

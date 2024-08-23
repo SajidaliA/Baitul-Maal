@@ -30,7 +30,7 @@ fun ComposeNavigation(drawerState: DrawerState? = null, navController: NavHostCo
                 AgevanListScreen(navController)
             }
             composable(Screens.loginscreen.name) {
-                LoginScreen { _: String, _: String -> }
+                LoginScreen { _: String, _: String, _: Boolean -> }
             }
         }
     }

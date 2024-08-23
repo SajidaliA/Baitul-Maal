@@ -1,4 +1,4 @@
-package com.sajid_ali.baitulmaal
+package com.sajid_ali.baitulmaal.viewnodel
 
 import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.ktx.firestore
@@ -12,9 +12,9 @@ import kotlinx.coroutines.flow.asStateFlow
 class UserViewModel : ViewModel() {
     private var _users = MutableStateFlow<List<User?>>(emptyList())
     var users = _users.asStateFlow()
+    val db = Firebase.firestore
 
     fun login() {
-        val db = Firebase.firestore
 
         db.collection(USER_COLLECTION)
             .addSnapshotListener { value, error ->

@@ -29,6 +29,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -48,18 +49,26 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.sajid_ali.baitulmaal.R
-import com.sajid_ali.baitulmaal.UserViewModel
+import com.sajid_ali.baitulmaal.app.BMApplication
 import com.sajid_ali.baitulmaal.ui.ui.theme.BaitulMaalTheme
+import com.sajid_ali.baitulmaal.viewnodel.UserViewModel
+import kotlinx.coroutines.launch
 
 class LoginActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        val bmApp = application as BMApplication
         setContent {
             BaitulMaalTheme {
                 val userViewModel: UserViewModel = viewModel()
                 val users by userViewModel.users.collectAsState()
                 val context = LocalContext.current
+                val scope = rememberCoroutineScope()
+                val isUserLogin = bmApp.userPref.isUserLogin().collectAsState(initial = false).value
+                if (isUserLogin) {
+                    navigateToMainActivity()
+                }
                 Scaffold(modifier = Modifier.fillMaxSize()) { _ ->
                     LoginScreen { mobileNo, password, keepMeLoging ->
                         if (mobileNo.isEmpty()) {
@@ -87,10 +96,9 @@ class LoginActivity : ComponentActivity() {
                                 user?.let {
                                     if (user.mobileNo == mobileNo && user.password == password) {
                                         userFound = true
-                                        if (keepMeLoging) {
-
+                                        scope.launch {
+                                            bmApp.userPref.saveIsUserLogin(keepMeLoging)
                                         }
-                                        navigateToMainActivity()
                                     }
                                 }
                             }

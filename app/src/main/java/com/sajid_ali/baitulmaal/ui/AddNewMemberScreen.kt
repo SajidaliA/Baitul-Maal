@@ -19,6 +19,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -38,12 +39,14 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.sajid_ali.baitulmaal.R
 import com.sajid_ali.baitulmaal.model.Member
 import com.sajid_ali.baitulmaal.utils.MEMBER_KEY
 import com.sajid_ali.baitulmaal.utils.aukafAmount
 import com.sajid_ali.baitulmaal.utils.madresaFeesAmount
+import com.sajid_ali.baitulmaal.viewnodel.AgevanViewModel
 
 @Composable
 fun AddNewMemberScreen(navController: NavHostController? = null) {
@@ -89,6 +92,8 @@ fun AddNewMemberScreen(navController: NavHostController? = null) {
 
     var anchorPosition by remember { mutableStateOf(Offset.Zero) }
     var showPopup by remember { mutableStateOf(false) }
+    val agevanViewModel: AgevanViewModel = viewModel()
+    val agevanList by agevanViewModel.agevanList.collectAsState()
 
     Column(
         modifier = Modifier
@@ -236,8 +241,8 @@ fun AddNewMemberScreen(navController: NavHostController? = null) {
     }
 
     if (showPopup) {
-        AgevanListPopup(anchorPosition) {
-            mSelectedAgevan = it
+        AgevanListPopup(agevanList, anchorPosition) {
+            mSelectedAgevan = it?.name ?: ""
             showPopup = false
         }
     }
@@ -245,7 +250,7 @@ fun AddNewMemberScreen(navController: NavHostController? = null) {
 
 }
 
-fun getAgevanById(agevadId: Int?): String {
+fun getAgevanById(agevadId: Long?): String {
     return "Agevan name"
 }
 

@@ -27,7 +27,7 @@ import com.sajid_ali.baitulmaal.model.Agevan
 @Composable
 fun AgevanItem(
     navHostController: NavHostController,
-    agevan: Agevan,
+    agevan: Agevan?,
     onEditClicked: (Any) -> Unit,
     onDeleteClicked: (Any) -> Unit,
 ) {
@@ -58,26 +58,20 @@ fun AgevanItem(
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 12.sp
                     )
-                    Text(text = agevan.name)
+                    Text(text = agevan?.name ?: "")
                     Text(
-                        text = "${stringResource(id = R.string.mobile_no)} ${agevan.contactNo}",
+                        text = "${stringResource(id = R.string.mobile_no)} ${agevan?.contactNo}",
                         color = Color.Black.copy(alpha = 0.5f),
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 12.sp
                     )
                 }
 
-                Text(
-                    modifier = Modifier.padding(end = 16.dp),
-                    text = "${stringResource(id = R.string.members)} : ${agevan.members.size}",
-                    color = colorResource(id = R.color.teal_700).copy(alpha = 0.8f),
-                    fontWeight = FontWeight.SemiBold,
-                    fontSize = 12.sp
-                )
-
             }
             Spacer(modifier = Modifier.height(16.dp))
-            EditDelete(setColor = false, obj = agevan, onEditClicked, onDeleteClicked)
+            if (agevan != null) {
+                EditDelete(setColor = false, obj = agevan, onEditClicked, onDeleteClicked)
+            }
         }
     }
 }

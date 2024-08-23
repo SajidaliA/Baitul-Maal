@@ -75,4 +75,5 @@ dependencies {
     implementation(platform(libs.com.google.firebase))
     implementation(libs.com.google.firebase.analytics)
     implementation(libs.com.google.firebase.firestore)
+    implementation(libs.androidx.datastore)
 }

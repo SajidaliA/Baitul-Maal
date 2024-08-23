@@ -15,6 +15,7 @@ import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -23,10 +24,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.sajid_ali.baitulmaal.R
 import com.sajid_ali.baitulmaal.model.Agevan
-import com.sajid_ali.baitulmaal.utils.agevanList
+import com.sajid_ali.baitulmaal.viewnodel.AgevanViewModel
 
 @Composable
 fun AgevanListScreen(navHostController: NavHostController) {
@@ -42,6 +44,9 @@ fun AgevanListScreen(navHostController: NavHostController) {
     var isEdit by remember {
         mutableStateOf(false)
     }
+    val agevanViewModel: AgevanViewModel = viewModel()
+    val agevanList by agevanViewModel.agevanList.collectAsState()
+
     Column(modifier = Modifier.fillMaxSize()) {
         Header(stringResource(id = R.string.agevan_list), false)
         LazyColumn(
@@ -49,7 +54,12 @@ fun AgevanListScreen(navHostController: NavHostController) {
             modifier = Modifier
                 .fillMaxWidth()
         ) {
-            items(agevanList.subList(1, agevanList.size)) { agevan ->
+            val list = if (agevanList.isNotEmpty()) {
+                agevanList.subList(1, agevanList.size)
+            } else {
+                emptyList()
+            }
+            items(list) { agevan ->
                 AgevanItem(navHostController, agevan, { agevanEdit ->
                     //Edit agevan
 

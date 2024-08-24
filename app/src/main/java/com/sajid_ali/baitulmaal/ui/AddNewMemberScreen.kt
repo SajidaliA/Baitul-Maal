@@ -79,7 +79,6 @@ fun AddNewMemberScreen(navController: NavHostController? = null) {
     if (aboveFourYears.isNotEmpty()) {
         totalAukafAmount = aboveFourYears.toInt() * aukafAmount
     }
-
     var studyInMadresa by remember {
         mutableStateOf(member?.studyInMadresa ?: "")
     }
@@ -89,8 +88,10 @@ fun AddNewMemberScreen(navController: NavHostController? = null) {
     if (studyInMadresa.isNotEmpty()) {
         totalFeesAmount = studyInMadresa.toInt() * madresaFeesAmount
     }
-
     var totalPayableAmount by remember {
+        mutableIntStateOf(0)
+    }
+    var paidMonths by remember {
         mutableIntStateOf(0)
     }
 
@@ -110,6 +111,7 @@ fun AddNewMemberScreen(navController: NavHostController? = null) {
                 mSelectedAgevan = filteredAgevan[0]!!
             }
         }
+        paidMonths = member.paidMonths
     }
 
     Column(
@@ -261,7 +263,7 @@ fun AddNewMemberScreen(navController: NavHostController? = null) {
                         fourYearsAbove = aboveFourYears,
                         studyInMadresa = studyInMadresa,
                         agevadId = mSelectedAgevan.id,
-                        paidMonths = 0
+                        paidMonths = paidMonths
                     )
                     if (isEdit) {
                         memberViewModel.updateMember(member, object : DataUpdateCallback {
@@ -270,15 +272,14 @@ fun AddNewMemberScreen(navController: NavHostController? = null) {
                                     context,
                                     "સભ્ય સફળતાપૂર્વક અપડેટ થયા",
                                     Toast.LENGTH_SHORT
-                                )
-                                    .show()
+                                ).show()
+                                navController?.popBackStack()
                             }
 
                             override fun onFailure() {
                                 Toast.makeText(context, "સભ્ય અપડેટ થયા નથી", Toast.LENGTH_SHORT)
                                     .show()
                             }
-
                         })
                     } else {
                         memberViewModel.addMember(member, object : DataUpdateCallback {

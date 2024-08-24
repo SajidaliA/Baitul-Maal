@@ -73,13 +73,9 @@ fun MemberListScreen(navHostController: NavHostController, drawerState: DrawerSt
             it.totalMadresaFeeAmount = it.studyInMadresa.toInt() * madresaFeesAmount
             it.totalPayableAmountForOneMonth = it.totalAukafAmount + it.totalMadresaFeeAmount
             it.totalPayableAmount = it.totalPayableAmountForOneMonth * (12 - it.paidMonths)
-            it.totalPaidAmount = it.totalPayableAmountForOneMonth * 12
-
-            if (it.paidMonths == 12) {
-                totalPaidAmount += it.totalPaidAmount
-            } else {
-                totalUnPaidAmount += it.totalPayableAmount
-            }
+            it.totalPaidAmount = it.totalPayableAmountForOneMonth * it.paidMonths
+            totalPaidAmount += it.totalPaidAmount
+            totalUnPaidAmount += it.totalPayableAmount
         }
     }
 
@@ -91,8 +87,6 @@ fun MemberListScreen(navHostController: NavHostController, drawerState: DrawerSt
             showPopup = false
         }
     }
-
-
 
     Column(modifier = Modifier.clickable {
         showPopup = false
@@ -174,17 +168,6 @@ fun MemberListScreen(navHostController: NavHostController, drawerState: DrawerSt
             )
         }
 
-//        LazyRow(
-//            modifier = Modifier.fillMaxWidth(),
-//            contentPadding = PaddingValues(horizontal = 16.dp)
-//        ) {
-//            items(months) { month ->
-//                MonthView(month, mSelectedMonth) { selectedMonth ->
-//                    mSelectedMonth = selectedMonth
-//                    Log.e("TAG", "Selected month : $selectedMonth")
-//                }
-//            }
-//        }
         Spacer(modifier = Modifier.height(3.dp))
         LazyColumn(
             modifier = Modifier

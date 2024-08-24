@@ -24,6 +24,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -54,9 +55,11 @@ import com.sajid_ali.baitulmaal.viewnodel.MemberViewModel
 
 @Composable
 fun MemberDetailsScreen(navController: NavHostController? = null) {
-    val member =
+    var member =
         navController?.previousBackStackEntry?.savedStateHandle
             ?.get<Member>(MEMBER_KEY)
+
+
     var openDeleteConfirmation by remember {
         mutableStateOf(false)
     }
@@ -66,6 +69,12 @@ fun MemberDetailsScreen(navController: NavHostController? = null) {
     }
 
     val memberViewModel: MemberViewModel = viewModel()
+    val members = memberViewModel.members.collectAsState()
+    val filteredList = members.value.filter { it?.id == member?.id }
+    if (filteredList.isNotEmpty()) {
+        member = filteredList[0]
+    }
+
 
     Scaffold(
         topBar = {
@@ -91,11 +100,11 @@ fun MemberDetailsScreen(navController: NavHostController? = null) {
                 MemberDetails(it)
                 Column(modifier = Modifier.padding(16.dp)) {
                     EditDelete(setColor = true, it, { member ->
-                        navController.currentBackStackEntry?.savedStateHandle?.set(
+                        navController?.currentBackStackEntry?.savedStateHandle?.set(
                             MEMBER_KEY,
                             member
                         )
-                        navController.navigate(Screens.addNewMember.name)
+                        navController?.navigate(Screens.addNewMember.name)
                     }) { member ->
                         openDeleteConfirmation = true
                     }
@@ -134,14 +143,15 @@ fun MemberDetailsScreen(navController: NavHostController? = null) {
 
                 } else {
                     member.paidMonths = member.paidMonths.plus(it)
+                    member.totalPayableAmount =
+                        member.totalPayableAmountForOneMonth * (12 - member.paidMonths)
                     memberViewModel.updateMember(member, object : DataUpdateCallback {
                         override fun onSuccess() {
                             Toast.makeText(
                                 context,
                                 "સભ્ય સફળતાપૂર્વક અપડેટ થયા",
                                 Toast.LENGTH_SHORT
-                            )
-                                .show()
+                            ).show()
                         }
 
                         override fun onFailure() {

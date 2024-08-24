@@ -39,8 +39,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.sajid_ali.baitulmaal.R
+import com.sajid_ali.baitulmaal.callbacks.DataUpdateCallback
 import com.sajid_ali.baitulmaal.model.Member
 import com.sajid_ali.baitulmaal.model.Month
 import com.sajid_ali.baitulmaal.utils.MEMBER_KEY
@@ -48,6 +50,7 @@ import com.sajid_ali.baitulmaal.utils.Screens
 import com.sajid_ali.baitulmaal.utils.aukafAmount
 import com.sajid_ali.baitulmaal.utils.madresaFeesAmount
 import com.sajid_ali.baitulmaal.utils.months
+import com.sajid_ali.baitulmaal.viewnodel.MemberViewModel
 
 @Composable
 fun MemberDetailsScreen(navController: NavHostController? = null) {
@@ -61,6 +64,8 @@ fun MemberDetailsScreen(navController: NavHostController? = null) {
     var showAddNewPaymentDialog by remember {
         mutableStateOf(false)
     }
+
+    val memberViewModel: MemberViewModel = viewModel()
 
     Scaffold(
         topBar = {
@@ -111,12 +116,9 @@ fun MemberDetailsScreen(navController: NavHostController? = null) {
                             color = Color.White
                         )
                     }
-
                 }
-
             }
         }
-
     }
     val context = LocalContext.current
     if (showAddNewPaymentDialog) {
@@ -131,7 +133,22 @@ fun MemberDetailsScreen(navController: NavHostController? = null) {
                     ).show()
 
                 } else {
-                    member.paidMonths.plus(it)
+                    member.paidMonths = member.paidMonths.plus(it)
+                    memberViewModel.updateMember(member, object : DataUpdateCallback {
+                        override fun onSuccess() {
+                            Toast.makeText(
+                                context,
+                                "સભ્ય સફળતાપૂર્વક અપડેટ થયા",
+                                Toast.LENGTH_SHORT
+                            )
+                                .show()
+                        }
+
+                        override fun onFailure() {
+                            Toast.makeText(context, "સભ્ય અપડેટ થયા નથી", Toast.LENGTH_SHORT).show()
+                        }
+
+                    })
                 }
             }
         }
@@ -141,8 +158,27 @@ fun MemberDetailsScreen(navController: NavHostController? = null) {
             obj = member,
             onDismissRequest = { openDeleteConfirmation = false },
             onConfirmation = { memberDelete ->
+                memberDelete as Member
                 openDeleteConfirmation = false
-                //Delete the member
+                memberViewModel.deleteMember(memberDelete.id, object : DataUpdateCallback {
+                    override fun onSuccess() {
+                        Toast.makeText(
+                            context,
+                            "સભ્ય સફળતાપૂર્વક ડીલીટ થયા",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        navController?.popBackStack()
+                    }
+
+                    override fun onFailure() {
+                        Toast.makeText(
+                            context,
+                            "સભ્ય ડીલીટ થયા નથી",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+
+                })
             },
             dialogText = stringResource(id = R.string.delete_member_confirm),
             buttonText = stringResource(id = R.string.delete)

@@ -35,11 +35,12 @@ import com.sajid_ali.baitulmaal.R
 
 @Composable
 fun AddNewAgevanDialog(
+    id: String,
     name: String,
     contactNo: String,
     isEdit: Boolean,
     onDismissRequest: () -> Unit,
-    onAddConfirm: (String, String) -> Unit,
+    onAddConfirm: (String, String, String) -> Unit,
 ) {
     var agevanName by remember {
         mutableStateOf("")
@@ -111,7 +112,7 @@ fun AddNewAgevanDialog(
                     ElevatedButton(
                         colors = ButtonDefaults.buttonColors(colorResource(id = R.color.teal_700)),
                         elevation = ButtonDefaults.elevatedButtonElevation(3.dp),
-                        onClick = { onAddConfirm(agevanName, agevanContactNo) },
+                        onClick = { onAddConfirm(id, agevanName, agevanContactNo) },
                         modifier = Modifier
                             .fillMaxWidth()
                             .weight(1f),

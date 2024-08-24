@@ -1,5 +1,6 @@
 package com.sajid_ali.baitulmaal.ui
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -56,7 +57,7 @@ fun MemberListScreen(navHostController: NavHostController, drawerState: DrawerSt
     var totalPaidAmount = 0
     var totalUnPaidAmount = 0
     var mSelectedAgevan by remember {
-        mutableStateOf(Agevan(0, "જનરલ લીસ્ટ"))
+        mutableStateOf(Agevan("", "જનરલ લીસ્ટ"))
     }
     var anchorPosition by remember { mutableStateOf(Offset.Zero) }
     var showPopup by remember { mutableStateOf(false) }
@@ -93,7 +94,9 @@ fun MemberListScreen(navHostController: NavHostController, drawerState: DrawerSt
 
 
 
-    Column {
+    Column(modifier = Modifier.clickable {
+        showPopup = false
+    }) {
         Header(stringResource(id = R.string.app_name), true, drawerState = drawerState)
         Row(
             modifier = Modifier
@@ -189,16 +192,18 @@ fun MemberListScreen(navHostController: NavHostController, drawerState: DrawerSt
             contentPadding = PaddingValues(top = 10.dp, bottom = 80.dp)
         ) {
             items(members) { member ->
-                if (mSelectedAgevan.id == 0) {
+                if (mSelectedAgevan.id == "") {
                     MemberItem(member) {
+                        showPopup = false
                         navHostController.currentBackStackEntry?.savedStateHandle?.set(
                             MEMBER_KEY,
                             member
                         )
                         navHostController.navigate(Screens.memberDetails.name)
                     }
-                } else if (member?.agevadId == mSelectedAgevan.id?.toLong()) {
+                } else if (member?.agevadId == mSelectedAgevan.id) {
                     MemberItem(member) {
+                        showPopup = false
                         navHostController.currentBackStackEntry?.savedStateHandle?.set(
                             MEMBER_KEY,
                             member

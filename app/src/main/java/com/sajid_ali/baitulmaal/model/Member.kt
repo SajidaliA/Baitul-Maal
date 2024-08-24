@@ -7,17 +7,17 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Member(
-    val id: Int? = null,
-    val headOfTheFamilyName: String = "",
+    var id: String = "",
+    var headOfTheFamilyName: String = "",
     val fourYearsAbove: String = "0",
     var totalAukafAmount: Int = fourYearsAbove.toInt() * aukafAmount,
     val studyInMadresa: String = "0",
     var totalMadresaFeeAmount: Int = studyInMadresa.toInt() * madresaFeesAmount,
     var totalPayableAmountForOneMonth: Int = totalAukafAmount + totalMadresaFeeAmount,
-    val agevadId: Long = 0,
-    val paidMonths: Int = 0,
+    var agevadId: String = "",
+    var paidMonths: Int = 0,
     var totalPayableAmount: Int = totalPayableAmountForOneMonth * (12 - paidMonths),
     var totalPaidAmount: Int = totalPayableAmountForOneMonth * paidMonths,
 ) : Parcelable {
-    constructor() : this(null)
+    constructor() : this("")
 }

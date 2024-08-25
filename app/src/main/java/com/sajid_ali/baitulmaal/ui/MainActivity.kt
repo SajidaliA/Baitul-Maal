@@ -47,7 +47,7 @@ class MainActivity : ComponentActivity() {
             BaitulMaalTheme {
                 val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
                 val scope = rememberCoroutineScope()
-                val navController = rememberNavController()
+                val navHostController = rememberNavController()
                 var openLogoutConfirmDialog by remember {
                     mutableStateOf(false)
                 }
@@ -83,7 +83,9 @@ class MainActivity : ComponentActivity() {
                                 },
                                 selected = false,
                                 onClick = {
-                                    navController.navigate(agevanListRoute)
+                                    navHostController.navigate(agevanListRoute) {
+                                        popUpTo(0)
+                                    }
                                     scope.launch {
                                         drawerState.apply {
                                             if (isClosed) open() else close()
@@ -117,7 +119,7 @@ class MainActivity : ComponentActivity() {
                     Scaffold(
                         modifier = Modifier.fillMaxSize()
                     ) { _ ->
-                        ComposeNavigation(drawerState, navController)
+                        ComposeNavigation(drawerState, navHostController)
                     }
                 }
                 if (openLogoutConfirmDialog) {
@@ -133,7 +135,7 @@ class MainActivity : ComponentActivity() {
                         },
                         onConfirmation = {
                             openLogoutConfirmDialog = false
-                            navController.navigate(loginScreenRoute) {
+                            navHostController.navigate(loginScreenRoute) {
                                 popUpTo(0)
                             }
                             scope.launch {

@@ -27,13 +27,13 @@ fun TotalPayableAmount(totalPayableAmount: Int) {
             .padding(16.dp)
     ) {
         Text(
-            text = stringResource(id = R.string.total_payable_amount),
+            text = stringResource(id = R.string.total_payable_amount_for_year),
             fontSize = 18.sp,
             fontWeight = FontWeight.SemiBold,
             color = Color.Red.copy(alpha = 0.7f)
         )
         Text(
-            text = " : ₹ $totalPayableAmount",
+            text = " : ₹$totalPayableAmount",
             fontSize = 18.sp,
             fontWeight = FontWeight.SemiBold,
             color = Color.Red.copy(alpha = 0.7f)

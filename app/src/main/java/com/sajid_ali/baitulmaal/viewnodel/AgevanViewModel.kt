@@ -14,14 +14,14 @@ class AgevanViewModel : ViewModel() {
     private var _agevanList = MutableStateFlow<List<Agevan?>>(emptyList())
     var agevanList = _agevanList.asStateFlow()
     private val db = Firebase.firestore
-    private val collection = db.collection(AGEVAN_COLLECTION)
+    private val agevanCollection = db.collection(AGEVAN_COLLECTION)
 
     init {
         getAllAgevan()
     }
 
     private fun getAllAgevan() {
-        collection
+        agevanCollection
             .addSnapshotListener { value, error ->
                 if (error != null) {
                     return@addSnapshotListener
@@ -42,7 +42,7 @@ class AgevanViewModel : ViewModel() {
 
     fun addAgevan(agevan: Agevan?, callback: DataUpdateCallback) {
         if (agevan != null) {
-            collection
+            agevanCollection
                 .add(agevan)
                 .addOnSuccessListener {
                     callback.onSuccess()
@@ -52,7 +52,7 @@ class AgevanViewModel : ViewModel() {
 
     fun updateAgevan(agevan: Agevan?, callback: DataUpdateCallback) {
         agevan?.id?.let {
-            collection.document(it).set(agevan)
+            agevanCollection.document(it).set(agevan)
                 .addOnSuccessListener {
                     callback.onSuccess()
                 }
@@ -60,7 +60,7 @@ class AgevanViewModel : ViewModel() {
     }
 
     fun deleteAgevan(agevanId: String, callback: DataUpdateCallback) {
-        collection.document(agevanId).delete().addOnSuccessListener {
+        agevanCollection.document(agevanId).delete().addOnSuccessListener {
             callback.onSuccess()
             }
     }

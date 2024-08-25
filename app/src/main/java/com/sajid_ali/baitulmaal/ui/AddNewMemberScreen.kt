@@ -53,10 +53,10 @@ import com.sajid_ali.baitulmaal.utils.MEMBER_KEY
 import com.sajid_ali.baitulmaal.utils.aukafAmount
 import com.sajid_ali.baitulmaal.utils.madresaFeesAmount
 import com.sajid_ali.baitulmaal.viewnodel.AgevanViewModel
-import com.sajid_ali.baitulmaal.viewnodel.MemberViewModel
 
 @Composable
-fun AddNewMemberScreen(navController: NavHostController? = null) {
+fun AddNewMemberScreen(navHostController: NavHostController? = null) {
+
     var newMemberId = ""
     var isEdit = false
 
@@ -65,7 +65,7 @@ fun AddNewMemberScreen(navController: NavHostController? = null) {
     }
 
     var member =
-        navController?.previousBackStackEntry?.savedStateHandle
+        navHostController?.previousBackStackEntry?.savedStateHandle
             ?.get<Member>(MEMBER_KEY)
 
     var headOfTheFamily by remember {
@@ -90,7 +90,7 @@ fun AddNewMemberScreen(navController: NavHostController? = null) {
     if (studyInMadresa.isNotEmpty()) {
         totalFeesAmount = studyInMadresa.toInt() * madresaFeesAmount
     }
-    var totalPayableAmount by remember {
+    var totalPayableAmountForOneMonth by remember {
         mutableIntStateOf(0)
     }
     var paidMonths by remember {
@@ -100,19 +100,12 @@ fun AddNewMemberScreen(navController: NavHostController? = null) {
     var anchorPosition by remember { mutableStateOf(Offset.Zero) }
     var showPopup by remember { mutableStateOf(false) }
     val agevanViewModel: AgevanViewModel = viewModel()
-    val memberViewModel: MemberViewModel = viewModel()
     val agevanList by agevanViewModel.agevanList.collectAsState()
     val context = LocalContext.current
 
     if (member != null) {
         isEdit = true
         newMemberId = member.id
-        if (agevanList.isNotEmpty()) {
-            val filteredAgevan = agevanList.filter { it?.id == member!!.agevadId }
-            if (filteredAgevan.isNotEmpty()) {
-                mSelectedAgevan = filteredAgevan[0]!!
-            }
-        }
         paidMonths = member.paidMonths
     }
 
@@ -126,8 +119,8 @@ fun AddNewMemberScreen(navController: NavHostController? = null) {
                 stringResource(id = R.string.add_new_member)
             } else {
                 stringResource(id = R.string.edit_member)
-            }
-        )
+            },
+            onEditClicked = {}, onDeleteClicked = {})
         Column(
             verticalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier
@@ -207,12 +200,12 @@ fun AddNewMemberScreen(navController: NavHostController? = null) {
                 Spacer(modifier = Modifier.height(16.dp))
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(text = stringResource(id = R.string.aukaf_amount))
-                    Text(text = " :-  ₹ $aukafAmount", fontWeight = FontWeight.SemiBold)
+                    Text(text = " :-  ₹$aukafAmount", fontWeight = FontWeight.SemiBold)
                 }
                 Spacer(modifier = Modifier.height(16.dp))
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(text = stringResource(id = R.string.total_aukaf_amount))
-                    Text(text = " :-  ₹ $totalAukafAmount", fontWeight = FontWeight.SemiBold)
+                    Text(text = " :-  ₹$totalAukafAmount", fontWeight = FontWeight.SemiBold)
                 }
                 Spacer(modifier = Modifier.height(16.dp))
                 OutlinedTextField(
@@ -238,17 +231,17 @@ fun AddNewMemberScreen(navController: NavHostController? = null) {
                 Spacer(modifier = Modifier.height(16.dp))
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(text = stringResource(id = R.string.madresa_fee_amount))
-                    Text(text = " : ₹ $madresaFeesAmount", fontWeight = FontWeight.SemiBold)
+                    Text(text = " : ₹$madresaFeesAmount", fontWeight = FontWeight.SemiBold)
                 }
                 Spacer(modifier = Modifier.height(16.dp))
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(text = stringResource(id = R.string.total_fees_amount))
-                    Text(text = " : ₹ $totalFeesAmount", fontWeight = FontWeight.SemiBold)
+                    Text(text = " : ₹$totalFeesAmount", fontWeight = FontWeight.SemiBold)
                 }
                 Spacer(modifier = Modifier.height(32.dp))
-                totalPayableAmount = totalAukafAmount + totalFeesAmount
+                totalPayableAmountForOneMonth = totalAukafAmount + totalFeesAmount
                 Text(
-                    text = "${stringResource(id = R.string.total_payable_amount_for_one_month)} : ₹ $totalPayableAmount",
+                    text = "${stringResource(id = R.string.total_payable_amount_for_one_month)} : ₹$totalPayableAmountForOneMonth",
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 20.sp,
                     color = Color.Red.copy(alpha = 0.8f)
@@ -268,44 +261,37 @@ fun AddNewMemberScreen(navController: NavHostController? = null) {
                         id = newMemberId,
                         headOfTheFamilyName = headOfTheFamily,
                         fourYearsAbove = aboveFourYears,
+                        totalAukafAmount = totalAukafAmount,
                         studyInMadresa = studyInMadresa,
-                        agevadId = mSelectedAgevan.id,
-                        paidMonths = paidMonths
+                        totalMadresaFeeAmount = totalFeesAmount,
+                        totalPayableAmountForOneMonth = totalPayableAmountForOneMonth,
+                        paidMonths = paidMonths,
+                        totalPayableAmount = totalPayableAmountForOneMonth * 12,
+                        totalPaidAmount = totalPayableAmountForOneMonth * paidMonths,
+                        totalUnpaidAmount = totalPayableAmountForOneMonth * (12 - paidMonths)
                     )
-                    if (isEdit) {
-                        memberViewModel.updateMember(member, object : DataUpdateCallback {
-                            override fun onSuccess() {
-                                Toast.makeText(
-                                    context,
-                                    "સભ્ય સફળતાપૂર્વક અપડેટ થયા",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                                navController?.popBackStack()
-                            }
 
-                            override fun onFailure() {
-                                Toast.makeText(context, "સભ્ય અપડેટ થયા નથી", Toast.LENGTH_SHORT)
-                                    .show()
+                    mSelectedAgevan.members.add(member)
+                    agevanViewModel.updateAgevan(mSelectedAgevan, object : DataUpdateCallback {
+                        override fun onSuccess() {
+                            var message = "સભ્ય સફળતાપૂર્વક ઉમેરાયા"
+                            if (isEdit) {
+                                message = "સભ્ય સફળતાપૂર્વક અપડેટ થયા"
                             }
-                        })
-                    } else {
-                        memberViewModel.addMember(member, object : DataUpdateCallback {
-                            override fun onSuccess() {
-                                Toast.makeText(
-                                    context,
-                                    "સભ્ય સફળતાપૂર્વક ઉમેરાયા",
-                                    Toast.LENGTH_SHORT
-                                )
-                                    .show()
-                                navController?.popBackStack()
-                            }
+                            Toast.makeText(
+                                context,
+                                message,
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            navHostController?.popBackStack()
+                        }
 
-                            override fun onFailure() {
-                                Toast.makeText(context, "સભ્ય ઉમેરાયો નથી", Toast.LENGTH_SHORT)
-                                    .show()
-                            }
-                        })
-                    }
+                        override fun onFailure() {
+                            Toast.makeText(context, "સભ્ય ઉમેરાયો નથી", Toast.LENGTH_SHORT)
+                                .show()
+                        }
+
+                    })
                 }
             ) {
                 Text(
@@ -322,7 +308,6 @@ fun AddNewMemberScreen(navController: NavHostController? = null) {
         AgevanListPopup(agevanList, anchorPosition) {
             it?.let {
                 mSelectedAgevan = it
-                member?.agevadId = mSelectedAgevan.id
             }
             showPopup = false
         }

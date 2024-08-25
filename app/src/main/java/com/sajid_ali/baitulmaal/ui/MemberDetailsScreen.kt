@@ -24,7 +24,6 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,13 +36,10 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.sajid_ali.baitulmaal.R
-import com.sajid_ali.baitulmaal.callbacks.DataUpdateCallback
 import com.sajid_ali.baitulmaal.model.Member
 import com.sajid_ali.baitulmaal.model.Month
 import com.sajid_ali.baitulmaal.utils.MEMBER_KEY
@@ -51,14 +47,15 @@ import com.sajid_ali.baitulmaal.utils.addNewMemberRoute
 import com.sajid_ali.baitulmaal.utils.aukafAmount
 import com.sajid_ali.baitulmaal.utils.madresaFeesAmount
 import com.sajid_ali.baitulmaal.utils.months
-import com.sajid_ali.baitulmaal.viewnodel.MemberViewModel
 
 @Composable
-fun MemberDetailsScreen(navController: NavHostController? = null) {
-    var member =
-        navController?.previousBackStackEntry?.savedStateHandle
-            ?.get<Member>(MEMBER_KEY)
-
+fun MemberDetailsScreen(
+    member: Member?,
+    navHostController: NavHostController? = null,
+    onMemberUpdate: (Member) -> Unit,
+    onDeleteMember: (Member) -> Unit,
+    onNewPaymentAdded: (Member) -> Unit,
+) {
 
     var openDeleteConfirmation by remember {
         mutableStateOf(false)
@@ -68,16 +65,12 @@ fun MemberDetailsScreen(navController: NavHostController? = null) {
         mutableStateOf(false)
     }
 
-    val memberViewModel: MemberViewModel = viewModel()
-    val members = memberViewModel.members.collectAsState()
-    val filteredList = members.value.filter { it?.id == member?.id }
-    if (filteredList.isNotEmpty()) {
-        member = filteredList[0]
-    }
-
     Scaffold(
         topBar = {
-            Header(stringResource(id = R.string.member_details))
+            Header(
+                stringResource(id = R.string.member_details),
+                onEditClicked = {},
+                onDeleteClicked = {})
         },
         bottomBar = {
             member?.let {
@@ -99,11 +92,11 @@ fun MemberDetailsScreen(navController: NavHostController? = null) {
                 MemberDetails(it)
                 Column(modifier = Modifier.padding(16.dp)) {
                     EditDelete(setColor = true, it, { member ->
-                        navController?.currentBackStackEntry?.savedStateHandle?.set(
+                        navHostController?.currentBackStackEntry?.savedStateHandle?.set(
                             MEMBER_KEY,
                             member
                         )
-                        navController?.navigate(addNewMemberRoute)
+                        navHostController?.navigate(addNewMemberRoute)
                     }) { member ->
                         openDeleteConfirmation = true
                     }
@@ -141,23 +134,14 @@ fun MemberDetailsScreen(navController: NavHostController? = null) {
                     ).show()
 
                 } else {
-                    member.paidMonths = member.paidMonths.plus(it)
-                    member.totalPayableAmount =
-                        member.totalPayableAmountForOneMonth * (12 - member.paidMonths)
-                    memberViewModel.updateMember(member, object : DataUpdateCallback {
-                        override fun onSuccess() {
-                            Toast.makeText(
-                                context,
-                                "સભ્ય સફળતાપૂર્વક અપડેટ થયા",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
+                    member.apply {
+                        paidMonths = paidMonths.plus(it)
+                        totalPayableAmount = totalPayableAmountForOneMonth * 12
+                        totalPaidAmount = totalPayableAmountForOneMonth * paidMonths
+                        totalUnpaidAmount = totalPayableAmountForOneMonth * (12 - paidMonths)
 
-                        override fun onFailure() {
-                            Toast.makeText(context, "સભ્ય અપડેટ થયા નથી", Toast.LENGTH_SHORT).show()
-                        }
-
-                    })
+                    }
+                    onNewPaymentAdded(member)
                 }
             }
         }
@@ -169,25 +153,7 @@ fun MemberDetailsScreen(navController: NavHostController? = null) {
             onConfirmation = { memberDelete ->
                 memberDelete as Member
                 openDeleteConfirmation = false
-                memberViewModel.deleteMember(memberDelete.id, object : DataUpdateCallback {
-                    override fun onSuccess() {
-                        Toast.makeText(
-                            context,
-                            "સભ્ય સફળતાપૂર્વક ડીલીટ થયા",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        navController?.popBackStack()
-                    }
-
-                    override fun onFailure() {
-                        Toast.makeText(
-                            context,
-                            "સભ્ય ડીલીટ થયા નથી",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-
-                })
+                onDeleteMember(memberDelete)
             },
             dialogText = stringResource(id = R.string.delete_member_confirm),
             buttonText = stringResource(id = R.string.delete)
@@ -206,7 +172,7 @@ fun AllPaid(totalPaidAmount: Int) {
             .padding(16.dp)
     ) {
         Text(
-            text = " ₹ $totalPaidAmount ",
+            text = " ₹$totalPaidAmount ",
             fontSize = 18.sp,
             fontWeight = FontWeight.SemiBold,
             color = colorResource(id = R.color.green)
@@ -270,7 +236,7 @@ fun MemberDetails(member: Member) {
                             fontWeight = FontWeight.SemiBold,
                             fontSize = 12.sp
                         )
-                        Text(text = "₹ $aukafAmount")
+                        Text(text = "₹$aukafAmount")
                     }
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Text(
@@ -279,7 +245,7 @@ fun MemberDetails(member: Member) {
                             fontWeight = FontWeight.SemiBold,
                             fontSize = 12.sp
                         )
-                        Text(text = "₹ ${member.totalAukafAmount}")
+                        Text(text = "₹${member.totalAukafAmount}")
                     }
                 }
                 HorizontalDivider(
@@ -309,7 +275,7 @@ fun MemberDetails(member: Member) {
                             fontWeight = FontWeight.SemiBold,
                             fontSize = 12.sp
                         )
-                        Text(text = "₹ $madresaFeesAmount")
+                        Text(text = "₹$madresaFeesAmount")
                     }
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Text(
@@ -318,7 +284,7 @@ fun MemberDetails(member: Member) {
                             fontWeight = FontWeight.SemiBold,
                             fontSize = 12.sp
                         )
-                        Text(text = "₹ ${member.totalMadresaFeeAmount}")
+                        Text(text = "₹${member.totalMadresaFeeAmount}")
                     }
                 }
                 HorizontalDivider(
@@ -331,7 +297,7 @@ fun MemberDetails(member: Member) {
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 12.sp,
                 )
-                Text(text = "₹ ${member.totalPayableAmountForOneMonth}")
+                Text(text = "₹${member.totalPayableAmountForOneMonth}")
                 if (member.paidMonths != 12) {
                     HorizontalDivider(
                         modifier = Modifier.padding(vertical = 16.dp),
@@ -378,10 +344,4 @@ fun MonthView(month: Month) {
     }
 
     Spacer(modifier = Modifier.width(16.dp))
-}
-
-@Preview
-@Composable
-private fun MemberDetailsScreenPrev() {
-    MemberDetailsScreen()
 }

@@ -47,11 +47,23 @@ fun MemberItem(member: Member?, onMemberClick: () -> Unit) {
                 fontWeight = FontWeight.SemiBold,
                 fontSize = 12.sp
             )
+            Text(
+                text = "${stringResource(id = R.string.total_payable_amount_for_year)} : ₹${member?.totalPayableAmount}",
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 12.sp,
+                color = colorResource(id = R.color.teal_700)
+            )
             if (member?.paidMonths != 12) {
                 Text(
                     text = if (member?.paidMonths != null) {
-                        "${12 - member.paidMonths} ${stringResource(id = R.string.un_paid_months)}"
+                        "${12 - member.paidMonths} ${
+                            stringResource(
+                                id = R.string.un_paid_months,
+                                member.totalUnpaidAmount
+                            )
+                        }"
                     } else "",
+                    fontWeight = FontWeight.SemiBold,
                     fontSize = 12.sp,
                     color = Color.Red.copy(alpha = 0.7f)
                 )
@@ -60,12 +72,6 @@ fun MemberItem(member: Member?, onMemberClick: () -> Unit) {
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text(
-                    text = "${stringResource(id = R.string.total_payable_amount)} : ₹${member?.totalPayableAmount}",
-                    fontWeight = FontWeight.SemiBold,
-                    fontSize = 12.sp,
-                    color = colorResource(id = R.color.teal_700)
-                )
                 if (member?.paidMonths == 12) {
                     Text(
                         text = stringResource(id = R.string.paid),

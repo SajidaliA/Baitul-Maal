@@ -24,14 +24,31 @@ import com.sajid_ali.baitulmaal.model.Agevan
 @Composable
 fun AgevanItem(
     agevan: Agevan?,
-    onAgevanLicked: (String, String) -> Unit,
+    onAgevanLicked: (Agevan) -> Unit,
 ) {
+    var totalPayableAmount = 0
+    var totalPaidAmount = 0
+    var totalUnpaidAmount = 0
+
+    agevan?.members?.forEach { member ->
+        member?.let {
+            totalPayableAmount += member.totalPayableAmount
+            totalPaidAmount += member.totalPaidAmount
+            totalUnpaidAmount += member.totalUnpaidAmount
+        }
+        agevan.totalPayableAmount = totalPayableAmount
+        agevan.totalPaidAmount = totalPaidAmount
+        agevan.totalUnPaidAmount = totalUnpaidAmount
+    }
+
+
+
     Card(
         shape = RoundedCornerShape(25.dp),
         colors = CardDefaults.cardColors(Color.White),
         elevation = CardDefaults.cardElevation(3.dp),
         onClick = {
-            agevan?.let { onAgevanLicked(it.id, it.name) }
+            agevan?.let { onAgevanLicked(it) }
         },
         modifier = Modifier.padding(vertical = 8.dp)
     ) {
@@ -58,7 +75,7 @@ fun AgevanItem(
                             fontSize = 12.sp
                         )
                         Text(
-                            text = "${stringResource(id = R.string.members)} : ${agevan?.memberCount}",
+                            text = "${stringResource(id = R.string.members)} ${agevan?.members?.size}",
                             color = colorResource(id = R.color.teal_700).copy(alpha = 0.8f),
                             fontWeight = FontWeight.SemiBold,
                             fontSize = 12.sp
@@ -72,6 +89,34 @@ fun AgevanItem(
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 12.sp
                     )
+
+                    Text(
+                        text = "${stringResource(id = R.string.total_payable_amount_for_year)}: ₹${totalPayableAmount}",
+                        color = colorResource(id = R.color.teal_700).copy(alpha = 0.8f),
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 12.sp
+                    )
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+
+                        Text(
+                            text = "${stringResource(id = R.string.total_paid_amount)}: ₹${totalPaidAmount}",
+                            color = colorResource(id = R.color.green).copy(alpha = 0.8f),
+                            fontWeight = FontWeight.SemiBold,
+                            fontSize = 12.sp
+                        )
+
+                        Text(
+                            text = "${stringResource(id = R.string.total_unpaid_amount)}: ₹${totalUnpaidAmount}",
+                            color = Color.Red.copy(alpha = 0.8f),
+                            fontWeight = FontWeight.SemiBold,
+                            fontSize = 12.sp
+                        )
+
+                    }
                 }
 
             }

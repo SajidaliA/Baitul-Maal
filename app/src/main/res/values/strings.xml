@@ -16,12 +16,12 @@
     <string name="add">એડ કરો</string>
     <string name="agevan_name">"આગેવાન નું નામ :"</string>
     <string name="total_paid_amount">"ટોટલ જમા રકમ "</string>
-    <string name="total_unpaid_amount">"ટોટલ બાકી રકમ "</string>
+    <string name="total_unpaid_amount">"ટોટલ બાકી રકમ"</string>
     <string name="edit_member">વિગત સુધારો</string>
-    <string name="un_paid_months">મહિનાના બાકી</string>
-    <string name="total_payable_amount">કુલ ભરવાપાત્ર રકમ</string>
+    <string name="un_paid_months">મહિનાના ₹%s બાકી</string>
+    <string name="total_payable_amount_for_year">વર્ષની કુલ ભરવાપાત્ર રકમ</string>
     <string name="agevan_list">આગેવાન યાદી</string>
-    <string name="members">સભ્યો</string>
+    <string name="members">કુલ સભ્યો :</string>
     <string name="add_new_agevan">નવા આગેવાન ઉમેરો</string>
     <string name="mobile_no">મોબાઈલ નં. :</string>
     <string name="cencel">કેન્સલ</string>

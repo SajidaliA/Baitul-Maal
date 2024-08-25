@@ -11,10 +11,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 class AgevanViewModel : ViewModel() {
-    private var _agevanList = MutableStateFlow<List<Agevan?>>(emptyList())
-    var agevanList = _agevanList.asStateFlow()
     private val db = Firebase.firestore
     private val agevanCollection = db.collection(AGEVAN_COLLECTION)
+    private var _agevanList = MutableStateFlow<List<Agevan?>>(emptyList())
+    var agevanList = _agevanList.asStateFlow()
+    var agevan: MutableStateFlow<Agevan?> = MutableStateFlow(Agevan())
 
     init {
         getAllAgevan()
@@ -63,5 +64,15 @@ class AgevanViewModel : ViewModel() {
         agevanCollection.document(agevanId).delete().addOnSuccessListener {
             callback.onSuccess()
             }
+    }
+
+    fun getAgevanByid(id: String?) {
+        if (id != null) {
+            agevanCollection.document(id).get().addOnSuccessListener { document ->
+                if (document != null) {
+                    agevan.value = document.toObject<Agevan>()
+                }
+            }
+        }
     }
 }

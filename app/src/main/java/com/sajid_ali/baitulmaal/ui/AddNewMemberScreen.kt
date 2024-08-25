@@ -49,6 +49,7 @@ import com.sajid_ali.baitulmaal.R
 import com.sajid_ali.baitulmaal.callbacks.DataUpdateCallback
 import com.sajid_ali.baitulmaal.model.Agevan
 import com.sajid_ali.baitulmaal.model.Member
+import com.sajid_ali.baitulmaal.utils.AGEVAN_KEY
 import com.sajid_ali.baitulmaal.utils.MEMBER_KEY
 import com.sajid_ali.baitulmaal.utils.aukafAmount
 import com.sajid_ali.baitulmaal.utils.madresaFeesAmount
@@ -68,6 +69,13 @@ fun AddNewMemberScreen(navHostController: NavHostController? = null) {
         navHostController?.previousBackStackEntry?.savedStateHandle
             ?.get<Member>(MEMBER_KEY)
 
+    val agevan =
+        navHostController?.previousBackStackEntry?.savedStateHandle
+            ?.get<Agevan>(AGEVAN_KEY)
+
+    if (agevan != null) {
+        mSelectedAgevan = agevan
+    }
     var headOfTheFamily by remember {
         mutableStateOf(member?.headOfTheFamilyName ?: "")
     }
@@ -103,10 +111,12 @@ fun AddNewMemberScreen(navHostController: NavHostController? = null) {
     val agevanList by agevanViewModel.agevanList.collectAsState()
     val context = LocalContext.current
 
+    var index = 0
     if (member != null) {
         isEdit = true
         newMemberId = member.id
         paidMonths = member.paidMonths
+        index = mSelectedAgevan.members.indexOf(member)
     }
 
     Column(
@@ -270,14 +280,16 @@ fun AddNewMemberScreen(navHostController: NavHostController? = null) {
                         totalPaidAmount = totalPayableAmountForOneMonth * paidMonths,
                         totalUnpaidAmount = totalPayableAmountForOneMonth * (12 - paidMonths)
                     )
-
-                    mSelectedAgevan.members.add(member)
+                    val message: String
+                    if (isEdit) {
+                        mSelectedAgevan.members[index] = member
+                        message = "સભ્ય સફળતાપૂર્વક અપડેટ થયા"
+                    } else {
+                        mSelectedAgevan.members.add(member)
+                        message = "સભ્ય સફળતાપૂર્વક ઉમેરાયા"
+                    }
                     agevanViewModel.updateAgevan(mSelectedAgevan, object : DataUpdateCallback {
                         override fun onSuccess() {
-                            var message = "સભ્ય સફળતાપૂર્વક ઉમેરાયા"
-                            if (isEdit) {
-                                message = "સભ્ય સફળતાપૂર્વક અપડેટ થયા"
-                            }
                             Toast.makeText(
                                 context,
                                 message,

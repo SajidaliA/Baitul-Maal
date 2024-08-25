@@ -38,12 +38,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
 import com.sajid_ali.baitulmaal.R
 import com.sajid_ali.baitulmaal.model.Member
 import com.sajid_ali.baitulmaal.model.Month
-import com.sajid_ali.baitulmaal.utils.MEMBER_KEY
-import com.sajid_ali.baitulmaal.utils.addNewMemberRoute
 import com.sajid_ali.baitulmaal.utils.aukafAmount
 import com.sajid_ali.baitulmaal.utils.madresaFeesAmount
 import com.sajid_ali.baitulmaal.utils.months
@@ -51,10 +48,9 @@ import com.sajid_ali.baitulmaal.utils.months
 @Composable
 fun MemberDetailsScreen(
     member: Member?,
-    navHostController: NavHostController? = null,
-    onMemberUpdate: (Member) -> Unit,
-    onDeleteMember: (Member) -> Unit,
-    onNewPaymentAdded: (Member) -> Unit,
+    onMemberUpdate: () -> Unit,
+    onDeleteMember: () -> Unit,
+    onNewPaymentAdded: () -> Unit,
 ) {
 
     var openDeleteConfirmation by remember {
@@ -91,12 +87,8 @@ fun MemberDetailsScreen(
             member?.let {
                 MemberDetails(it)
                 Column(modifier = Modifier.padding(16.dp)) {
-                    EditDelete(setColor = true, it, { member ->
-                        navHostController?.currentBackStackEntry?.savedStateHandle?.set(
-                            MEMBER_KEY,
-                            member
-                        )
-                        navHostController?.navigate(addNewMemberRoute)
+                    EditDelete(setColor = true, it, {
+                        onMemberUpdate()
                     }) { member ->
                         openDeleteConfirmation = true
                     }
@@ -141,7 +133,7 @@ fun MemberDetailsScreen(
                         totalUnpaidAmount = totalPayableAmountForOneMonth * (12 - paidMonths)
 
                     }
-                    onNewPaymentAdded(member)
+                    onNewPaymentAdded()
                 }
             }
         }
@@ -153,7 +145,7 @@ fun MemberDetailsScreen(
             onConfirmation = { memberDelete ->
                 memberDelete as Member
                 openDeleteConfirmation = false
-                onDeleteMember(memberDelete)
+                onDeleteMember()
             },
             dialogText = stringResource(id = R.string.delete_member_confirm),
             buttonText = stringResource(id = R.string.delete)
@@ -307,7 +299,12 @@ fun MemberDetails(member: Member) {
                     Text(
                         modifier = Modifier.fillMaxWidth(),
                         textAlign = TextAlign.Center,
-                        text = "${12 - member.paidMonths} ${stringResource(id = R.string.un_paid_months)}",
+                        text = "${12 - member.paidMonths} ${
+                            stringResource(
+                                id = R.string.un_paid_months,
+                                member.totalUnpaidAmount
+                            )
+                        }",
                         color = Color.Red,
                     )
                 }

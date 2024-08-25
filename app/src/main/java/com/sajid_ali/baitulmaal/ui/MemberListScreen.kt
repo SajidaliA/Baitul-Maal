@@ -25,6 +25,7 @@ import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -47,6 +48,7 @@ import com.sajid_ali.baitulmaal.callbacks.DataUpdateCallback
 import com.sajid_ali.baitulmaal.model.Agevan
 import com.sajid_ali.baitulmaal.model.Member
 import com.sajid_ali.baitulmaal.utils.AGEVAN_KEY
+import com.sajid_ali.baitulmaal.utils.MEMBER_KEY
 import com.sajid_ali.baitulmaal.utils.addNewMemberRoute
 import com.sajid_ali.baitulmaal.viewnodel.AgevanViewModel
 
@@ -56,14 +58,15 @@ fun MemberListScreen(
     drawerState: DrawerState?,
 ) {
     val agevanViewModel: AgevanViewModel = viewModel()
-    val agevan =
+    var agevan =
         navHostController.previousBackStackEntry?.savedStateHandle
             ?.get<Agevan>(AGEVAN_KEY)
+    agevanViewModel.getAgevanByid(agevan?.id)
+    agevan = agevanViewModel.agevan.collectAsState().value
 
     var openMemberDetails by remember {
         mutableStateOf(false)
     }
-
     var mMember by remember {
         mutableStateOf(Member())
     }
@@ -77,6 +80,22 @@ fun MemberListScreen(
         mutableStateOf(false)
     }
     val context = LocalContext.current
+
+    var totalPayableAmount = 0
+    var totalPaidAmount = 0
+    var totalUnpaidAmount = 0
+
+    agevan?.members?.forEach { member ->
+        member?.let {
+            totalPayableAmount += member.totalPayableAmount
+            totalPaidAmount += member.totalPaidAmount
+            totalUnpaidAmount += member.totalUnpaidAmount
+        }
+        agevan.totalPayableAmount = totalPayableAmount
+        agevan.totalPaidAmount = totalPaidAmount
+        agevan.totalUnPaidAmount = totalUnpaidAmount
+    }
+
     Column {
         Header(
             agevan?.name ?: stringResource(id = R.string.app_name),
@@ -221,12 +240,19 @@ fun MemberListScreen(
         }
     }
     if (openMemberDetails) {
-
         MemberDetailsScreen(
             mMember,
             onMemberUpdate = {
                 openMemberDetails = false
-                updateAgevan(context, agevan, mIndex, mMember, agevanViewModel)
+                navHostController.currentBackStackEntry?.savedStateHandle?.set(
+                    MEMBER_KEY,
+                    mMember
+                )
+                navHostController.currentBackStackEntry?.savedStateHandle?.set(
+                    AGEVAN_KEY,
+                    agevan
+                )
+                navHostController.navigate(addNewMemberRoute)
             },
             onNewPaymentAdded = {
                 updateAgevan(context, agevan, mIndex, mMember, agevanViewModel)

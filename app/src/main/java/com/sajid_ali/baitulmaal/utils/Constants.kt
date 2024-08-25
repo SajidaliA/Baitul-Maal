@@ -7,7 +7,6 @@ const val madresaFeesAmount: Int = 270
 const val MEMBER_KEY: String = "member_key"
 const val USER_TYPE_ADMIN: String = "ADMIN"
 const val USER_TYPE_AGEVAN: String = "AGEVAN"
-const val USER_TYPE_MEMBER: String = "MEMBER"
 const val USER_COLLECTION: String = "users"
 const val AGEVAN_COLLECTION: String = "agevans"
 const val MEMBER_COLLECTION: String = "members"
@@ -26,3 +25,11 @@ val months = listOf(
     Month("એપ્રિલ"),
     Month("મે")
 )
+
+const val agevanIdArg = "agevanId"
+const val agevanName = "agevanName"
+const val memberListRoute = "memberListRoute"
+const val memberDetailsRoute = "memberDetailsRoute"
+const val addNewMemberRoute = "addNewMemberRoute"
+const val agevanListRoute = "agevanListRoute"
+const val loginScreenRoute = "loginScreenRoute"

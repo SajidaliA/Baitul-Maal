@@ -3,9 +3,7 @@ package com.sajid_ali.baitulmaal.ui
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -19,24 +17,21 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
 import com.sajid_ali.baitulmaal.R
 import com.sajid_ali.baitulmaal.model.Agevan
 
 
 @Composable
 fun AgevanItem(
-    navHostController: NavHostController,
     agevan: Agevan?,
-    onEditClicked: (Any) -> Unit,
-    onDeleteClicked: (Any) -> Unit,
+    onAgevanLicked: (String, String) -> Unit,
 ) {
     Card(
         shape = RoundedCornerShape(25.dp),
         colors = CardDefaults.cardColors(Color.White),
         elevation = CardDefaults.cardElevation(3.dp),
         onClick = {
-            navHostController.popBackStack()
+            agevan?.let { onAgevanLicked(it.id, it.name) }
         },
         modifier = Modifier.padding(vertical = 8.dp)
     ) {
@@ -52,12 +47,24 @@ fun AgevanItem(
                         .fillMaxWidth()
                         .weight(2f)
                 ) {
-                    Text(
-                        text = stringResource(id = R.string.agevan_name),
-                        color = colorResource(id = R.color.teal_700).copy(alpha = 0.8f),
-                        fontWeight = FontWeight.SemiBold,
-                        fontSize = 12.sp
-                    )
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            text = stringResource(id = R.string.agevan_name),
+                            color = colorResource(id = R.color.teal_700).copy(alpha = 0.8f),
+                            fontWeight = FontWeight.SemiBold,
+                            fontSize = 12.sp
+                        )
+                        Text(
+                            text = "${stringResource(id = R.string.members)} : ${agevan?.memberCount}",
+                            color = colorResource(id = R.color.teal_700).copy(alpha = 0.8f),
+                            fontWeight = FontWeight.SemiBold,
+                            fontSize = 12.sp
+                        )
+                    }
+
                     Text(text = agevan?.name ?: "")
                     Text(
                         text = "${stringResource(id = R.string.mobile_no)} ${agevan?.contactNo}",
@@ -67,10 +74,6 @@ fun AgevanItem(
                     )
                 }
 
-            }
-            Spacer(modifier = Modifier.height(16.dp))
-            if (agevan != null) {
-                EditDelete(setColor = false, obj = agevan, onEditClicked, onDeleteClicked)
             }
         }
     }

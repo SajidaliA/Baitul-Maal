@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -37,7 +36,8 @@ import androidx.navigation.compose.rememberNavController
 import com.sajid_ali.baitulmaal.R
 import com.sajid_ali.baitulmaal.navigation.ComposeNavigation
 import com.sajid_ali.baitulmaal.ui.theme.BaitulMaalTheme
-import com.sajid_ali.baitulmaal.utils.Screens
+import com.sajid_ali.baitulmaal.utils.agevanListRoute
+import com.sajid_ali.baitulmaal.utils.loginScreenRoute
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
@@ -69,30 +69,6 @@ class MainActivity : ComponentActivity() {
                             NavigationDrawerItem(
                                 icon = {
                                     Icon(
-                                        Icons.Default.Home, contentDescription = null,
-                                        tint = colorResource(
-                                            id = R.color.teal_700
-                                        )
-                                    )
-                                },
-                                label = {
-                                    Text(
-                                        text = stringResource(id = R.string.member_list),
-                                        color = Color.Black.copy(alpha = 0.8f)
-                                    )
-                                },
-                                selected = false,
-                                onClick = {
-                                    navController.navigate(Screens.memberList.name)
-                                    scope.launch {
-                                        drawerState.apply {
-                                            if (isClosed) open() else close()
-                                        }
-                                    }
-                                })
-                            NavigationDrawerItem(
-                                icon = {
-                                    Icon(
                                         Icons.Default.AccountCircle, contentDescription = null,
                                         tint = colorResource(
                                             id = R.color.teal_700
@@ -107,7 +83,7 @@ class MainActivity : ComponentActivity() {
                                 },
                                 selected = false,
                                 onClick = {
-                                    navController.navigate(Screens.agevanList.name)
+                                    navController.navigate(agevanListRoute)
                                     scope.launch {
                                         drawerState.apply {
                                             if (isClosed) open() else close()
@@ -157,7 +133,7 @@ class MainActivity : ComponentActivity() {
                         },
                         onConfirmation = {
                             openLogoutConfirmDialog = false
-                            navController.navigate(Screens.loginscreen.name) {
+                            navController.navigate(loginScreenRoute) {
                                 popUpTo(0)
                             }
                             scope.launch {

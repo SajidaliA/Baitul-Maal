@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -31,17 +32,18 @@ import androidx.navigation.NavHostController
 import com.sajid_ali.baitulmaal.R
 import com.sajid_ali.baitulmaal.callbacks.DataUpdateCallback
 import com.sajid_ali.baitulmaal.model.Agevan
+import com.sajid_ali.baitulmaal.utils.memberListRoute
 import com.sajid_ali.baitulmaal.viewnodel.AgevanViewModel
 
 @Composable
-fun AgevanListScreen(navHostController: NavHostController) {
+fun AgevanListScreen(navHostController: NavHostController, drawerState: DrawerState?) {
     var showAddDialog by remember {
         mutableStateOf(false)
     }
     var openDeleteConfirmation by remember {
         mutableStateOf(false)
     }
-    var mAgevan by remember {
+    val mAgevan by remember {
         mutableStateOf<Agevan?>(null)
     }
     var isEdit by remember {
@@ -53,7 +55,7 @@ fun AgevanListScreen(navHostController: NavHostController) {
     val context = LocalContext.current
 
     Column(modifier = Modifier.fillMaxSize()) {
-        Header(stringResource(id = R.string.agevan_list), false)
+        Header(stringResource(id = R.string.app_name), true, drawerState = drawerState)
         LazyColumn(
             contentPadding = PaddingValues(start = 20.dp, end = 20.dp, top = 20.dp, bottom = 80.dp),
             modifier = Modifier
@@ -61,16 +63,9 @@ fun AgevanListScreen(navHostController: NavHostController) {
         ) {
 
             items(agevanList) { agevan ->
-                AgevanItem(navHostController, agevan, { agevanEdit ->
-                    //Edit agevan
-                    isEdit = true
-                    mAgevan = agevanEdit as Agevan
-                    showAddDialog = true
-                }, { agevanDelete ->
-                    mAgevan = agevanDelete as Agevan
-                    //Delete agevan from DB
-                    openDeleteConfirmation = true
-                })
+                AgevanItem(agevan) { agevanId, agevanName ->
+                    navHostController.navigate("${memberListRoute}/$agevanId/$agevanName")
+                }
             }
         }
     }

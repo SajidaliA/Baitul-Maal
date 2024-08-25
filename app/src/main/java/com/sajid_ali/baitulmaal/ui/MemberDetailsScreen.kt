@@ -47,7 +47,7 @@ import com.sajid_ali.baitulmaal.callbacks.DataUpdateCallback
 import com.sajid_ali.baitulmaal.model.Member
 import com.sajid_ali.baitulmaal.model.Month
 import com.sajid_ali.baitulmaal.utils.MEMBER_KEY
-import com.sajid_ali.baitulmaal.utils.Screens
+import com.sajid_ali.baitulmaal.utils.addNewMemberRoute
 import com.sajid_ali.baitulmaal.utils.aukafAmount
 import com.sajid_ali.baitulmaal.utils.madresaFeesAmount
 import com.sajid_ali.baitulmaal.utils.months
@@ -74,7 +74,6 @@ fun MemberDetailsScreen(navController: NavHostController? = null) {
     if (filteredList.isNotEmpty()) {
         member = filteredList[0]
     }
-
 
     Scaffold(
         topBar = {
@@ -104,7 +103,7 @@ fun MemberDetailsScreen(navController: NavHostController? = null) {
                             MEMBER_KEY,
                             member
                         )
-                        navController?.navigate(Screens.addNewMember.name)
+                        navController?.navigate(addNewMemberRoute)
                     }) { member ->
                         openDeleteConfirmation = true
                     }

@@ -98,8 +98,12 @@ class LoginActivity : ComponentActivity() {
                                 user?.let {
                                     if (user.mobileNo == mobileNo && user.password == password) {
                                         userFound = true
-                                        scope.launch {
-                                            bmApp.userPref.saveIsUserLogin(keepMeLoging)
+                                        if (keepMeLoging) {
+                                            scope.launch {
+                                                bmApp.userPref.saveIsUserLogin(true)
+                                            }
+                                        } else {
+                                            navigateToMainActivity()
                                         }
                                     }
                                 }
